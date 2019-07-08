@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
-import 'package:jepret/routes//WelcomeRoute.dart';
+import 'package:jepret/routes/WelcomeRoute.dart';
+import 'package:jepret/routes/RegisterRoute.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: JepretColor.PRIMARY_DARKER,
         backgroundColor: JepretColor.APP_BACKGROUND_LIGHT
       ),
-      home: WelcomeRoute(),
+      home: RegisterRoute(),
     );
   }
 }
