@@ -3,11 +3,11 @@ import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-class IndividualTab extends StatefulWidget {
-  IndividualTabState createState() => IndividualTabState();
+class IndividualProfileTab extends StatefulWidget {
+  IndividualProfileTabState createState() => IndividualProfileTabState();
 }
 
-class IndividualTabState extends State<IndividualTab> {
+class IndividualProfileTabState extends State<IndividualProfileTab> {
   FocusNode _focus_name = new FocusNode();
   FocusNode _focus_mobile = new FocusNode();
   FocusNode _focus_nik = new FocusNode();

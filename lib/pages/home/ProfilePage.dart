@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
-import 'package:jepret/pages/home/tabs/profile/IndividualTab.dart';
+import 'package:jepret/pages/home/tabs/profile/IndividualProfileTab.dart';
+import 'package:jepret/pages/home/tabs/profile/BusinessProfileTab.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePageState createState() => ProfilePageState();
@@ -72,8 +73,8 @@ class ProfilePageState extends State<ProfilePage> {
   Widget _renderTabBody() {
     return TabBarView(
       children: [
-        IndividualTab(),
-        Icon(Icons.directions_transit),
+        IndividualProfileTab(),
+        BusinessProfileTab()
       ],
     );
   }

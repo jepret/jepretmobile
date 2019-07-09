@@ -59,7 +59,14 @@ class HomeRouteState extends State<HomeRoute> {
           centerTitle: false,
           backgroundColor: Colors.white,
           elevation: 1,
-          title: HeadingText(text: "Profil")
+          title: HeadingText(text: "Profil"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.settings),
+              color: JepretColor.PRIMARY_DARKER,
+              onPressed: () {},
+            )
+          ]
         );
       default:
         return AppBar(
