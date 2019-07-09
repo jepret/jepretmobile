@@ -11,31 +11,16 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: _renderLogoTitle(),
-          elevation: 0,
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _renderIncentiveHeading(),
-            _renderQuestSection(),
-            Divider(height: 1),
-            _renderNearbySection()
-          ],
-        )
-    );
-  }
-
-  Widget _renderLogoTitle() {
-    return Row(
-      children: <Widget>[
-        Image(image: AssetImage(Assets.LOGO), height: 24),
-        Container(width: 8),
-        HeadingText(text: "Jepret")
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          _renderIncentiveHeading(),
+          _renderQuestSection(),
+          Divider(height: 1),
+          _renderNearbySection()
+        ],
+      )
     );
   }
 
