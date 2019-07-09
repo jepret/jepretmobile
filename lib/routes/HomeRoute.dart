@@ -49,7 +49,7 @@ class HomeRouteState extends State<HomeRoute> {
         return AppBar(
           backgroundColor: Colors.white,
           title: _renderLogoTitle(),
-          elevation: 0,
+          elevation: 1,
         );
       case 1:
         return null;
