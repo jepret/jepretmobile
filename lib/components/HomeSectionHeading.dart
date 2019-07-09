@@ -29,7 +29,7 @@ class HomeSectionHeading extends StatelessWidget {
                         fontSize: 18
                     )
                 ),
-                Container(height: 4),
+                Container(height: 2),
                 Text(
                     subtitle,
                     style: TextStyle(

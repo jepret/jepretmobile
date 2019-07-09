@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primaryColor: JepretColor.PRIMARY,
         primaryColorDark: JepretColor.PRIMARY_DARKER,
-        backgroundColor: JepretColor.APP_BACKGROUND_LIGHT
+        backgroundColor: JepretColor.APP_BACKGROUND_LIGHT,
+        fontFamily: "NunitoSans"
       ),
       home: HomeRoute(),
     );
