@@ -3,6 +3,7 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/routes/WelcomeRoute.dart';
 import 'package:jepret/routes/RegisterRoute.dart';
 import 'package:jepret/routes/LoginRoute.dart';
+import 'package:jepret/pages/home/HomePage.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: JepretColor.PRIMARY_DARKER,
         backgroundColor: JepretColor.APP_BACKGROUND_LIGHT
       ),
-      home: LoginRoute(),
+      home: HomePage(),
     );
   }
 }
