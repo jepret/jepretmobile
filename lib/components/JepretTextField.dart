@@ -5,6 +5,7 @@ class JepretTextField extends StatelessWidget {
   String hint;
   Widget icon;
   bool isPassword;
+  bool hasFloatingPlaceholder;
   TextEditingController controller;
   FocusNode focusNode;
 
@@ -13,7 +14,8 @@ class JepretTextField extends StatelessWidget {
     this.icon,
     this.isPassword: false,
     this.controller,
-    this.focusNode
+    this.focusNode,
+    this.hasFloatingPlaceholder: false
   });
 
   @override
@@ -24,8 +26,9 @@ class JepretTextField extends StatelessWidget {
       obscureText: isPassword,
       decoration: InputDecoration(
           prefixIcon: icon,
+          labelText: hint,
           border: new OutlineInputBorder(),
-          hintText: hint
+          hasFloatingPlaceholder: hasFloatingPlaceholder,
       ),
     );
   }

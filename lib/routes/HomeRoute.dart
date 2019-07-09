@@ -3,6 +3,7 @@ import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/home/HomePage.dart';
+import 'package:jepret/pages/home/ProfilePage.dart';
 
 class HomeRoute extends StatefulWidget {
   HomeRouteState createState() => HomeRouteState();
@@ -54,7 +55,12 @@ class HomeRouteState extends State<HomeRoute> {
       case 1:
         return null;
       case 2:
-        return null;
+        return AppBar(
+          centerTitle: false,
+          backgroundColor: Colors.white,
+          elevation: 1,
+          title: HeadingText(text: "Profil")
+        );
       default:
         return AppBar(
           backgroundColor: Colors.white,
@@ -69,9 +75,9 @@ class HomeRouteState extends State<HomeRoute> {
       case 0:
         return HomePage();
       case 1:
-        return null;
+        return Container();
       case 2:
-        return null;
+        return ProfilePage();
     }
   }
 
