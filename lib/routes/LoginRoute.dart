@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
+import 'package:jepret/components/ClickableText.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-class RegisterRoute extends StatelessWidget {
-  FocusNode _focus_name = new FocusNode();
+class LoginRoute extends StatelessWidget {
   FocusNode _focus_email = new FocusNode();
   FocusNode _focus_password = new FocusNode();
-  FocusNode _focus_repassword = new FocusNode();
 
-  TextEditingController _controller_name = new TextEditingController();
   TextEditingController _controller_email = new TextEditingController();
   TextEditingController _controller_password = new TextEditingController();
-  TextEditingController _controller_repassword = new TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +23,8 @@ class RegisterRoute extends StatelessWidget {
       body: FormKeyboardActions(
         keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
         actions: [
-          KeyboardAction(focusNode: _focus_name),
           KeyboardAction(focusNode: _focus_email),
           KeyboardAction(focusNode: _focus_password),
-          KeyboardAction(focusNode: _focus_repassword)
         ],
         child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -77,9 +72,9 @@ class RegisterRoute extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          HeadingText(text: "Buat akun baru"),
+          HeadingText(text: "Masuk"),
           Container(height: 8),
-          Text("Daftarkan diri Anda untuk menggunakan Jepret", style: TextStyle(fontSize: 18, color: Colors.black38))
+          Text("Masuk ke akun Anda untuk menggunakan Jepret", style: TextStyle(fontSize: 18, color: Colors.black38))
         ],
       ),
     );
@@ -91,13 +86,6 @@ class RegisterRoute extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          JepretTextField(
-            hint: 'Nama lengkap',
-            icon: Icon(Icons.person_outline),
-            focusNode: _focus_name,
-            controller: _controller_name,
-          ),
-          Container(height: 12),
           JepretTextField(
             hint: 'Alamat e-mail',
             icon: Icon(Icons.mail_outline),
@@ -112,18 +100,11 @@ class RegisterRoute extends StatelessWidget {
             focusNode: _focus_password,
             controller: _controller_password,
           ),
-          Container(height: 12),
-          JepretTextField(
-            hint: 'Ulangi kata sandi',
-            icon: Icon(Icons.lock_outline),
-            isPassword: true,
-            focusNode: _focus_repassword,
-            controller: _controller_repassword,
-          ),
           Container(height: 24),
-          Text(
-            "Dengan mendaftar, Anda dianggap menyetujui Syarat dan Ketentuan Penggunaan aplikasi Jepret",
-            style: TextStyle(color: Colors.black45, fontSize: 14),
+          ClickableText(
+            text: "Lupa kata sandi?",
+            fontSize: 16,
+            onPressed: () {}
           )
         ],
       ),
@@ -137,7 +118,7 @@ class RegisterRoute extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           PrimaryButton(
-            text: "Daftar",
+            text: "Masuk",
             onPressed: () {},
           ),
         ],
