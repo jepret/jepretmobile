@@ -103,14 +103,15 @@ class BusinessProfileTabState extends State<BusinessProfileTab> {
   }
   
   Widget _renderCardMenu(IconData icon, String text, VoidCallback onPressed) {
-    return Material(
-      elevation: 2,
+    return MaterialButton(
+      elevation: 1,
       color: Colors.white,
-      borderRadius: BorderRadius.circular(4),
+      onPressed: onPressed,
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Icon(icon),
             Container(width: 24),
