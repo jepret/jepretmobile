@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jepret/routes/HomeRoute.dart';
+import 'package:jepret/routes/individual/IndividualHomeRoute.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
@@ -128,7 +128,7 @@ class LoginRouteState extends State<LoginRoute> {
             text: "Masuk",
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (BuildContext context) => HomeRoute())
+                MaterialPageRoute(builder: (BuildContext context) => IndividualHomeRoute())
               );
             },
           ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
-import 'package:jepret/pages/home/tabs/profile/IndividualProfileTab.dart';
-import 'package:jepret/pages/home/tabs/profile/BusinessProfileTab.dart';
+import 'package:jepret/pages/individual/tabs/profile/IndividualProfileTab.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePageState createState() => ProfilePageState();
@@ -17,9 +16,8 @@ class ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               _renderProfileHeading(),
-              _renderTabBar(),
               Expanded(
-                  child: _renderTabBody()
+                  child:  IndividualProfileTab()
               )
             ],
           )
@@ -54,28 +52,6 @@ class ProfilePageState extends State<ProfilePage> {
           ],
         )
       )
-    );
-  }
-
-  Widget _renderTabBar() {
-    return Container(
-      color: Color.fromARGB(255, 240, 240, 240),
-      child: TabBar(
-        indicatorColor: JepretColor.PRIMARY_DARKER,
-        tabs: [
-          Tab(text: "Perorangan"),
-          Tab(text: "Usaha")
-        ],
-      )
-    );
-  }
-
-  Widget _renderTabBody() {
-    return TabBarView(
-      children: [
-        IndividualProfileTab(),
-        BusinessProfileTab()
-      ],
     );
   }
 }

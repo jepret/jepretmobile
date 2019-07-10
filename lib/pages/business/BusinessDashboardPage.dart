@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
-import 'package:jepret/partials/BusinessDashboardVisitorLineChart.dart';
-import 'package:jepret/partials/BusinessDashboardReviewBarChart.dart';
+import 'package:jepret/partials/business/BusinessDashboardVisitorLineChart.dart';
+import 'package:jepret/partials/business/BusinessDashboardReviewBarChart.dart';
 import 'package:intl/intl.dart';
 
-class BusinessDashboardRoute extends StatefulWidget {
-  BusinessDashboardRouteState createState() => BusinessDashboardRouteState();
+class BusinessDashboardPage extends StatefulWidget {
+  BusinessDashboardPageState createState() => BusinessDashboardPageState();
 }
 
-class BusinessDashboardRouteState extends State<BusinessDashboardRoute> {
+class BusinessDashboardPageState extends State<BusinessDashboardPage> {
   int currentBalance = 5668456;
   int currentReviews = 256;
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: JepretColor.PRIMARY_DARKER),
-          onPressed: () {
-            Navigator.of(context).pop();
-          }
-        ),
-        title: Text("Dashboard", style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        centerTitle: false,
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -47,7 +33,6 @@ class BusinessDashboardRouteState extends State<BusinessDashboardRoute> {
             Container(height: 48)
           ],
         )
-      )
     );
   }
 

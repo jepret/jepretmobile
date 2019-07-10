@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
-import 'package:jepret/pages/home/HomePage.dart';
-import 'package:jepret/pages/home/ProfilePage.dart';
+import 'package:jepret/pages/business/BusinessDashboardPage.dart';
+import 'package:jepret/pages/business/BusinessProfilePage.dart';
+import 'package:jepret/routes/individual/IndividualHomeRoute.dart';
 
-class HomeRoute extends StatefulWidget {
-  HomeRouteState createState() => HomeRouteState();
+class BusinessHomeRoute extends StatefulWidget {
+  BusinessHomeRouteState createState() => BusinessHomeRouteState();
 }
 
-class HomeRouteState extends State<HomeRoute> {
+class BusinessHomeRouteState extends State<BusinessHomeRoute> {
   int _currentIndex = 0;
 
   Widget build(BuildContext context) {
@@ -22,12 +23,12 @@ class HomeRouteState extends State<HomeRoute> {
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem> [
         BottomNavigationBarItem(
-          icon: new Icon(Icons.home),
-          title: new Text('Beranda'/*, style: TextStyle(fontWeight: FontWeight.bold)*/),
+          icon: new Icon(Icons.pie_chart_outlined),
+          title: new Text('Dashboard'/*, style: TextStyle(fontWeight: FontWeight.bold)*/),
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            title: Text('Sekitar'/*, style: TextStyle(fontWeight: FontWeight.bold)*/)
+            icon: Icon(Icons.description),
+            title: Text('Penjaminan'/*, style: TextStyle(fontWeight: FontWeight.bold)*/)
         ),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
@@ -52,6 +53,18 @@ class HomeRouteState extends State<HomeRoute> {
           title: _renderLogoTitle(),
           elevation: 1,
           automaticallyImplyLeading: false,
+          centerTitle: false,
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+              child: IconButton(
+                  onPressed: () {
+                    _switchToIndividualProfile();
+                  },
+                  icon: Icon(Icons.swap_horiz, color: JepretColor.PRIMARY_DARKER)
+              )
+            )
+          ],
         );
       case 1:
         return null;
@@ -83,21 +96,32 @@ class HomeRouteState extends State<HomeRoute> {
   Widget _renderBody(int index) {
     switch(index) {
       case 0:
-        return HomePage();
+        return BusinessDashboardPage();
       case 1:
         return Container();
       case 2:
-        return ProfilePage();
+        return BusinessProfilePage();
     }
   }
 
   Widget _renderLogoTitle() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Image(image: AssetImage(Assets.LOGO), height: 24),
         Container(width: 8),
-        HeadingText(text: "Jepret")
+        HeadingText(text: "Jepret UMKM")
       ],
+    );
+  }
+
+  void _switchToIndividualProfile() {
+    Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, anim1, anim2) => IndividualHomeRoute(),
+          transitionsBuilder: (context, anim1, anim2, child) => FadeTransition(opacity: anim1, child: child),
+          transitionDuration: Duration(milliseconds: 250),
+        )
     );
   }
 }

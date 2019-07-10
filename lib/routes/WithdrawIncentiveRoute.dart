@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/JepretTextField.dart';
-import 'package:jepret/partials/BusinessDashboardVisitorLineChart.dart';
-import 'package:jepret/partials/BusinessDashboardReviewBarChart.dart';
+import 'package:jepret/partials/business/BusinessDashboardVisitorLineChart.dart';
+import 'package:jepret/partials/business/BusinessDashboardReviewBarChart.dart';
 import 'package:intl/intl.dart';
 
 class WithdrawIncentiveRoute extends StatefulWidget {
@@ -11,7 +11,6 @@ class WithdrawIncentiveRoute extends StatefulWidget {
 
 class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
   int currentBalance = 5668456;
-  int currentReviews = 256;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +38,9 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
               child: Text("Metode penarikan", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
             ),
             Divider(height:1),
-            Container(
+            Material(
               color: Colors.white,
-              child:  Column(
+              child: Column(
                 children: <Widget>[
                   _listMenuItem("Transfer Bank", Icon(Icons.sync), onTap: () {}),
                   Divider(height: 1),
@@ -63,7 +62,7 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
                       onTap: () {}
                   ),
                 ],
-              )
+              ),
             ),
             Divider(height: 1),
           ],
@@ -89,7 +88,10 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
               ),
               Container(height: 8),
               Text(
-                "Rp112.001",
+                NumberFormat.currency(
+                  locale: "ID",
+                  symbol: "Rp"
+                ).format(currentBalance),
                 style: TextStyle(
                   color: JepretColor.PRIMARY_DARKER,
                   fontWeight: FontWeight.bold,
@@ -129,6 +131,7 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
     return ListTile(
       leading: icon,
       title: Text(title, style: TextStyle(color: color)),
+      trailing: Icon(Icons.chevron_right),
       onTap: onTap,
     );
   }

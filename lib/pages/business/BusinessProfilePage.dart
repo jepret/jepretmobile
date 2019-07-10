@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:jepret/components/CompletionProgressBar.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/constants/JepretColor.dart';
-import 'package:jepret/routes/BusinessDashboardRoute.dart';
+import 'package:jepret/pages/business/BusinessDashboardPage.dart';
 
-class BusinessProfileTab extends StatefulWidget {
-  BusinessProfileTabState createState() => BusinessProfileTabState();
+class BusinessProfilePage extends StatefulWidget {
+  BusinessProfilePageState createState() => BusinessProfilePageState();
 }
 
-class BusinessProfileTabState extends State<BusinessProfileTab> {
+class BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Padding(
@@ -18,13 +18,6 @@ class BusinessProfileTabState extends State<BusinessProfileTab> {
                 Container(height: 16),
                 _renderInformationStatusHeader(),
                 Container(height: 32),
-                _renderCardMenu(Icons.assessment, "Dashboard", () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => BusinessDashboardRoute())
-                  );
-                }),
-                Container(height: 16),
-                _renderCardMenu(Icons.monetization_on, "Pendaftaran Penjaminan", () {})
               ]
             )
         )
