@@ -23,7 +23,9 @@ class RegisterRoute extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back),color: JepretColor.PRIMARY_DARKER, onPressed: () {}),
+        leading: IconButton(icon: Icon(Icons.arrow_back),color: JepretColor.PRIMARY_DARKER, onPressed: () {
+          Navigator.of(context).pop();
+        }),
       ),
       body: FormKeyboardActions(
         keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
@@ -138,9 +140,18 @@ class RegisterRoute extends StatelessWidget {
             hasFloatingPlaceholder: true
           ),
           Container(height: 24),
-          Text(
-            "Dengan mendaftar, Anda dianggap menyetujui Syarat dan Ketentuan Penggunaan aplikasi Jepret",
-            style: TextStyle(color: Colors.black45, fontSize: 14),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.black45, fontSize: 14),
+              children: <TextSpan>[
+                TextSpan(text: "Dengan mendaftar, Anda dianggap menyetujui "),
+                TextSpan(
+                  text: "Syarat dan Ketentuan Penggunaan",
+                  style: TextStyle(color: JepretColor.PRIMARY_DARKER)
+                ),
+                TextSpan(text: " aplikasi Jepret"),
+              ]
+            ),
           )
         ],
       ),

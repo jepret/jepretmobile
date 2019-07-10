@@ -3,6 +3,8 @@ import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/constants/Assets.dart';
+import 'package:jepret/routes/RegisterRoute.dart';
+import 'package:jepret/routes/LoginRoute.dart';
 
 class WelcomeRoute extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class WelcomeRoute extends StatelessWidget {
             children: <Widget>[
               _renderLogoSection(context),
               Spacer(),
-              _renderBottomButtons()
+              _renderBottomButtons(context)
             ],
           )
       )
@@ -38,7 +40,7 @@ class WelcomeRoute extends StatelessWidget {
     );
   }
 
-  Widget _renderBottomButtons() {
+  Widget _renderBottomButtons(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -46,12 +48,20 @@ class WelcomeRoute extends StatelessWidget {
         children: <Widget>[
           PrimaryButton(
             text: "Daftar",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext context) => RegisterRoute())
+              );
+            },
           ),
           Container(height: 16),
           OutlinedPrimaryButton(
             text: "Masuk",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) => LoginRoute())
+              );
+            },
           )
         ],
       )

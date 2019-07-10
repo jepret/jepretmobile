@@ -7,6 +7,7 @@ import 'package:jepret/components/HomeSectionHeading.dart';
 import 'package:jepret/model/Offering.dart';
 import 'package:jepret/model/Partner.dart';
 import 'package:jepret/model/Location.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
@@ -16,6 +17,8 @@ class HomePageState extends State<HomePage> {
   List<Offering> questItems;
   List<Partner> nearestPartnerItems;
   Location currentLocation;
+  double currentBalance = 256541;
+  int currentVisits = 34;
 
   @override
   void initState() {
@@ -109,9 +112,14 @@ class HomePageState extends State<HomePage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                HeadingText(text: "Rp 205.431,-", color: Colors.white),
+                HeadingText(
+                    text: NumberFormat.currency(
+                      locale: "ID",
+                      symbol: "Rp"
+                    ).format(currentBalance),
+                color: Colors.white),
                 Spacer(),
-                Text("50 kunjungan", style: TextStyle(color: Colors.white))
+                Text("${currentVisits} kunjungan", style: TextStyle(color: Colors.white))
               ],
             )
           ),

@@ -51,6 +51,7 @@ class HomeRouteState extends State<HomeRoute> {
           backgroundColor: Colors.white,
           title: _renderLogoTitle(),
           elevation: 1,
+          automaticallyImplyLeading: false,
         );
       case 1:
         return null;
@@ -59,6 +60,7 @@ class HomeRouteState extends State<HomeRoute> {
           centerTitle: false,
           backgroundColor: Colors.white,
           elevation: 1,
+          automaticallyImplyLeading: false,
           title: HeadingText(text: "Profil"),
           actions: <Widget>[
             IconButton(
@@ -73,6 +75,7 @@ class HomeRouteState extends State<HomeRoute> {
           backgroundColor: Colors.white,
           title: _renderLogoTitle(),
           elevation: 0,
+          automaticallyImplyLeading: false,
         );
     }
   }
