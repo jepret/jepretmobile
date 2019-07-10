@@ -94,14 +94,14 @@ class LoginRouteState extends State<LoginRoute> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           JepretTextField(
-            hint: 'Nomor Induk Kependudukan (NIK)',
+            label: 'Nomor Induk Kependudukan (NIK)',
             icon: Icon(Icons.credit_card),
             focusNode: _focus_nik,
             controller: _controller_nik,
           ),
           Container(height: 12),
           JepretTextField(
-            hint: 'Kata sandi',
+            label: 'Kata sandi',
             icon: Icon(Icons.lock),
             isPassword: true,
             focusNode: _focus_password,

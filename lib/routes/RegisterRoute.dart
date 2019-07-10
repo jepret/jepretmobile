@@ -97,7 +97,7 @@ class RegisterRoute extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           JepretTextField(
-            hint: 'Nama lengkap',
+            label: 'Nama lengkap',
             icon: Icon(Icons.person_outline),
             focusNode: _focus_name,
             controller: _controller_name,
@@ -105,7 +105,7 @@ class RegisterRoute extends StatelessWidget {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: 'Nomor Induk Kependudukan (NIK)',
+            label: 'Nomor Induk Kependudukan (NIK)',
             icon: Icon(Icons.credit_card),
             keyboardType: TextInputType.number,
             focusNode: _focus_nik,
@@ -114,7 +114,7 @@ class RegisterRoute extends StatelessWidget {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: 'Nomor Telepon Seluler',
+            label: 'Nomor Telepon Seluler',
             keyboardType: TextInputType.phone,
             icon: Icon(Icons.phone_iphone),
             focusNode: _focus_mobile,
@@ -123,7 +123,7 @@ class RegisterRoute extends StatelessWidget {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: 'Kata sandi',
+            label: 'Kata sandi',
             icon: Icon(Icons.lock),
             isPassword: true,
             focusNode: _focus_password,
@@ -132,7 +132,7 @@ class RegisterRoute extends StatelessWidget {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: 'Ulangi kata sandi',
+            label: 'Ulangi kata sandi',
             icon: Icon(Icons.lock_outline),
             isPassword: true,
             focusNode: _focus_repassword,

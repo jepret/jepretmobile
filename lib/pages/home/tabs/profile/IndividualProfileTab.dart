@@ -60,7 +60,7 @@ class IndividualProfileTabState extends State<IndividualProfileTab> {
       child: Column(
         children: <Widget>[
           JepretTextField(
-            hint: "Nama Lengkap",
+            label: "Nama Lengkap",
             focusNode: _focus_name,
             controller: _controller_name,
             icon: Icon(Icons.person_outline),
@@ -68,7 +68,7 @@ class IndividualProfileTabState extends State<IndividualProfileTab> {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: "Nomor Telepon Seluler",
+            label: "Nomor Telepon Seluler",
             focusNode: _focus_mobile,
             controller: _controller_mobile,
             icon: Icon(Icons.phone),
@@ -77,7 +77,7 @@ class IndividualProfileTabState extends State<IndividualProfileTab> {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: "Nomor Induk Kependudukan (NIK)",
+            label: "Nomor Induk Kependudukan (NIK)",
             focusNode: _focus_nik,
             controller: _controller_nik,
             icon: Icon(Icons.account_balance),

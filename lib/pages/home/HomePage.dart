@@ -7,6 +7,7 @@ import 'package:jepret/components/HomeSectionHeading.dart';
 import 'package:jepret/model/Offering.dart';
 import 'package:jepret/model/Partner.dart';
 import 'package:jepret/model/Location.dart';
+import 'package:jepret/routes/WithdrawIncentiveRoute.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -128,10 +129,14 @@ class HomePageState extends State<HomePage> {
             children: <Widget>[
               Expanded(
                   child: FlatButton.icon(
-                    onPressed: () {},
                     icon: Icon(Icons.attach_money),
                     label: Text("Tarik"),
                     textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (BuildContext context) => WithdrawIncentiveRoute())
+                      );
+                    }
                   )
               ),
               Container(height: 48, child: VerticalDivider(color: Colors.white70)),

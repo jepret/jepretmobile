@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
 
 class JepretTextField extends StatelessWidget {
+  String label;
   String hint;
   Widget icon;
   bool isPassword;
@@ -11,6 +12,7 @@ class JepretTextField extends StatelessWidget {
   TextInputType keyboardType;
 
   JepretTextField({
+    this.label,
     this.hint,
     this.icon,
     this.isPassword: false,
@@ -28,8 +30,9 @@ class JepretTextField extends StatelessWidget {
       obscureText: isPassword,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+          hintText: hint,
           prefixIcon: icon,
-          labelText: hint,
+          labelText: label,
           border: new OutlineInputBorder(),
           hasFloatingPlaceholder: hasFloatingPlaceholder,
       ),
