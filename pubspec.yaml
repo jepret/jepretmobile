@@ -26,6 +26,7 @@ dependencies:
   keyboard_actions: "^1.0.3"
   intervalprogressbar: ^1.0.1
   intl: ^0.15.8
+  charts_flutter: ^0.6.0
 
 dev_dependencies:
   flutter_test:

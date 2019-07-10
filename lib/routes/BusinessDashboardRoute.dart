@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
-import 'package:jepret/pages/home/HomePage.dart';
-import 'package:jepret/pages/home/ProfilePage.dart';
+import 'package:jepret/partials/BusinessDashboardVisitorLineChart.dart';
+import 'package:jepret/partials/BusinessDashboardReviewBarChart.dart';
+import 'package:intl/intl.dart';
 
 class BusinessDashboardRoute extends StatefulWidget {
   BusinessDashboardRouteState createState() => BusinessDashboardRouteState();
 }
 
 class BusinessDashboardRouteState extends State<BusinessDashboardRoute> {
+  int currentBalance = 5668456;
+  int currentReviews = 256;
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: JepretColor.PRIMARY_DARKER),
@@ -30,6 +33,18 @@ class BusinessDashboardRouteState extends State<BusinessDashboardRoute> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             _renderIncentiveHeading(),
+            _renderSectionHeading("Statistik pengunjung", "Total pengunjung dari 10 Juli - 17 Juli: 523"),
+            _renderVisitorChart(),
+            Divider(),
+            _renderSectionHeading("Ulasan positif", "Jumlah ulasan positif 10 Juli - 17 Juli: 12"),
+            _renderPositiveReviewsChart(),
+            Divider(),
+            _renderSectionHeading("Ulasan negatif", "Jumlah ulasan negatif 10 Juli - 17 Juli: 12"),
+            _renderNegativeReviewsChart(),
+            Divider(),
+            _renderSectionHeading("Ulasan netral", "Jumlah ulasan netral 10 Juli - 17 Juli: 12"),
+            _renderNeutralReviewsChart(),
+            Container(height: 48)
           ],
         )
       )
@@ -60,9 +75,15 @@ class BusinessDashboardRouteState extends State<BusinessDashboardRoute> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    HeadingText(text: "Rp 167.252,-", color: Colors.white),
+                    HeadingText(
+                        text: NumberFormat.currency(
+                          locale: 'ID',
+                          symbol: 'Rp'
+                        ).format(currentBalance),
+                        color: Colors.white
+                    ),
                     Spacer(),
-                    Text("250 ulasan", style: TextStyle(color: Colors.white))
+                    Text("${currentReviews} ulasan", style: TextStyle(color: Colors.white))
                   ],
                 )
             ),
@@ -78,8 +99,105 @@ class BusinessDashboardRouteState extends State<BusinessDashboardRoute> {
                     )
                 )
               ],
-            ),
+            )
           ],
+        )
+    );
+  }
+
+  Widget _renderSectionHeading(String title, String subtitle) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(subtitle, style: TextStyle(fontSize: 16, color: Colors.grey))
+        ],
+      )
+    );
+  }
+
+  Widget _renderVisitorChart() {
+    return AspectRatio(
+      aspectRatio: 16/8,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: BusinessDashboardVisitorLineChart(
+            {
+              DateTime(2019, 07, 10): 50,
+              DateTime(2019, 07, 11): 65,
+              DateTime(2019, 07, 12): 60,
+              DateTime(2019, 07, 13): 75,
+              DateTime(2019, 07, 14): 72,
+              DateTime(2019, 07, 15): 90,
+              DateTime(2019, 07, 16): 110,
+              DateTime(2019, 07, 17): 115,
+            }
+        ),
+      )
+    );
+  }
+
+  Widget _renderPositiveReviewsChart() {
+    return AspectRatio(
+      aspectRatio: 16/8,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: BusinessDashboardReviewBarChart(
+            {
+              DateTime(2019, 07, 10): 50,
+              DateTime(2019, 07, 11): 65,
+              DateTime(2019, 07, 12): 60,
+              DateTime(2019, 07, 13): 75,
+              DateTime(2019, 07, 14): 72,
+              DateTime(2019, 07, 15): 90,
+              DateTime(2019, 07, 16): 110,
+              DateTime(2019, 07, 17): 115,
+            }
+        ),
+      )
+    );
+  }
+
+  Widget _renderNegativeReviewsChart() {
+    return AspectRatio(
+        aspectRatio: 16/8,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: BusinessDashboardReviewBarChart(
+              {
+                DateTime(2019, 07, 10): 50,
+                DateTime(2019, 07, 11): 65,
+                DateTime(2019, 07, 12): 60,
+                DateTime(2019, 07, 13): 75,
+                DateTime(2019, 07, 14): 72,
+                DateTime(2019, 07, 15): 90,
+                DateTime(2019, 07, 16): 110,
+                DateTime(2019, 07, 17): 115,
+              }
+          ),
+        )
+    );
+  }
+
+  Widget _renderNeutralReviewsChart() {
+    return AspectRatio(
+        aspectRatio: 16/8,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: BusinessDashboardReviewBarChart(
+              {
+                DateTime(2019, 07, 10): 50,
+                DateTime(2019, 07, 11): 65,
+                DateTime(2019, 07, 12): 60,
+                DateTime(2019, 07, 13): 75,
+                DateTime(2019, 07, 14): 72,
+                DateTime(2019, 07, 15): 90,
+                DateTime(2019, 07, 16): 110,
+                DateTime(2019, 07, 17): 115,
+              }
+          ),
         )
     );
   }
