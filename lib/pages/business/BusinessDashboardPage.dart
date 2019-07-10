@@ -3,6 +3,7 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/partials/business/BusinessDashboardVisitorLineChart.dart';
 import 'package:jepret/partials/business/BusinessDashboardReviewBarChart.dart';
+import 'package:jepret/routes/WithdrawIncentiveRoute.dart';
 import 'package:intl/intl.dart';
 
 class BusinessDashboardPage extends StatefulWidget {
@@ -77,10 +78,14 @@ class BusinessDashboardPageState extends State<BusinessDashboardPage> {
               children: <Widget>[
                 Expanded(
                     child: FlatButton.icon(
-                      onPressed: () {},
                       icon: Icon(Icons.attach_money),
                       label: Text("Tarik"),
                       textColor: Colors.white,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) => WithdrawIncentiveRoute())
+                        );
+                      },
                     )
                 )
               ],
