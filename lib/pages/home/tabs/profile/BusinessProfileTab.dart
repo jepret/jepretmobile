@@ -113,7 +113,7 @@ class BusinessProfileTabState extends State<BusinessProfileTab> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Icon(icon),
+            Icon(icon, color: Colors.grey,),
             Container(width: 24),
             Text(text, style: TextStyle(fontSize: 16))
           ],

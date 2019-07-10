@@ -7,12 +7,14 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 
 class RegisterRoute extends StatelessWidget {
   FocusNode _focus_name = new FocusNode();
-  FocusNode _focus_email = new FocusNode();
+  FocusNode _focus_nik = new FocusNode();
+  FocusNode _focus_mobile = new FocusNode();
   FocusNode _focus_password = new FocusNode();
   FocusNode _focus_repassword = new FocusNode();
 
   TextEditingController _controller_name = new TextEditingController();
-  TextEditingController _controller_email = new TextEditingController();
+  TextEditingController _controller_nik = new TextEditingController();
+  TextEditingController _controller_mobile = new TextEditingController();
   TextEditingController _controller_password = new TextEditingController();
   TextEditingController _controller_repassword = new TextEditingController();
 
@@ -27,7 +29,8 @@ class RegisterRoute extends StatelessWidget {
         keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
         actions: [
           KeyboardAction(focusNode: _focus_name),
-          KeyboardAction(focusNode: _focus_email),
+          KeyboardAction(focusNode: _focus_nik),
+          KeyboardAction(focusNode: _focus_mobile),
           KeyboardAction(focusNode: _focus_password),
           KeyboardAction(focusNode: _focus_repassword)
         ],
@@ -96,29 +99,43 @@ class RegisterRoute extends StatelessWidget {
             icon: Icon(Icons.person_outline),
             focusNode: _focus_name,
             controller: _controller_name,
+            hasFloatingPlaceholder: true
           ),
-          Container(height: 12),
+          Container(height: 16),
           JepretTextField(
-            hint: 'Alamat e-mail',
-            icon: Icon(Icons.mail_outline),
-            focusNode: _focus_email,
-            controller: _controller_email,
+            hint: 'Nomor Induk Kependudukan (NIK)',
+            icon: Icon(Icons.credit_card),
+            keyboardType: TextInputType.number,
+            focusNode: _focus_nik,
+            controller: _controller_nik,
+            hasFloatingPlaceholder: true
           ),
-          Container(height: 12),
+          Container(height: 16),
+          JepretTextField(
+            hint: 'Nomor Telepon Seluler',
+            keyboardType: TextInputType.phone,
+            icon: Icon(Icons.phone_iphone),
+            focusNode: _focus_mobile,
+            controller: _controller_mobile,
+            hasFloatingPlaceholder: true
+          ),
+          Container(height: 16),
           JepretTextField(
             hint: 'Kata sandi',
             icon: Icon(Icons.lock),
             isPassword: true,
             focusNode: _focus_password,
             controller: _controller_password,
+            hasFloatingPlaceholder: true
           ),
-          Container(height: 12),
+          Container(height: 16),
           JepretTextField(
             hint: 'Ulangi kata sandi',
             icon: Icon(Icons.lock_outline),
             isPassword: true,
             focusNode: _focus_repassword,
             controller: _controller_repassword,
+            hasFloatingPlaceholder: true
           ),
           Container(height: 24),
           Text(

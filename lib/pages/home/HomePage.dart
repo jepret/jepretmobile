@@ -4,12 +4,73 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/HomeShowcaseCard.dart';
 import 'package:jepret/components/HomeSectionHeading.dart';
+import 'package:jepret/model/Offering.dart';
+import 'package:jepret/model/Partner.dart';
+import 'package:jepret/model/Location.dart';
 
 class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
+  List<Offering> questItems;
+  List<Partner> nearestPartnerItems;
+  Location currentLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    this.setState(() {
+      this.questItems = [
+        Offering(
+            monetaryOffering: 5343,
+            partner: Partner(
+              partnerId: "abxbdc",
+              name: "Onel's Kitchen",
+              imageUrl: "https://img.sndimg.com/food/image/upload/w_560,h_315,c_fill,fl_progressive,q_80/v1/img/recipes/53/74/76/83kDuWs7QsCf4oZ0rhFs_0S9A7513.jpg",
+            )
+        ),
+        Offering(
+            monetaryOffering: 2456,
+            partner: Partner(
+              partnerId: "abxbdc2",
+              name: "Gabu's Weebs Store",
+              imageUrl: "http://i.imgur.com/juY3Z2z.jpg",
+            )
+        ),
+        Offering(
+            monetaryOffering: 1425,
+            partner: Partner(
+              partnerId: "abxbdc3",
+              name: "Warmindo Putra Sunda",
+              imageUrl: "https://2.bp.blogspot.com/-kYVFJrav8As/WrFs74W9EDI/AAAAAAAAArc/g4M-wQe7bgcD19JyQ-9EHW7gAiku4KeEgCLcBGAs/s1600/burjo%2Bbisnis%2Bmodal%2Bkecil%2Bkeuntungan%2Bbesar.jpg",
+            )
+        )
+      ];
+
+      this.nearestPartnerItems = [
+        Partner(
+            partnerId: "166gd6",
+            name: "Feby's Breakfast Joint",
+            imageUrl: "http://www.thebedfordgc.com/wp-content/uploads/2019/03/burger.jpg"
+        ),
+        Partner(
+            partnerId: "556s556d",
+            name: "Warung Ko Christzen",
+            imageUrl: "http://marketeers.com/wp-content/uploads/2018/11/warung_xl-a.jpg"
+        )
+      ];
+
+      this.currentLocation = Location(
+        streetAddress: "Sopo Del Tower B Lt 8",
+        municipality: "Jakarta Selatan",
+        province: "DKI Jakarta",
+        lat: 0,
+        lon: 0
+      );
+    });
+  }
+
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -95,24 +156,24 @@ class HomePageState extends State<HomePage> {
           Container(height: 8),
           AspectRatio(
             aspectRatio: 16/7,
-            child: ListView(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                Container(width: 8),
-                HomeShowcaseCard(
-                  title: "Onel's Kitchen",
-                  subtitle: "Dapatkan 40 poin",
-                  backgroundImage: NetworkImage("https://img.sndimg.com/food/image/upload/w_560,h_315,c_fill,fl_progressive,q_80/v1/img/recipes/53/74/76/83kDuWs7QsCf4oZ0rhFs_0S9A7513.jpg"),
-                  onPressed: () {},
-                ),
-                HomeShowcaseCard(
-                  title: "Gabu's Weebs Store",
-                  subtitle: "Dapatkan 35 poin",
-                  backgroundImage: NetworkImage("http://i.imgur.com/juY3Z2z.jpg"),
-                  onPressed: () {},
-                ),
-                Container(width: 8)
-              ],
+              itemCount: questItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Offering _offering = questItems[index];
+                final double paddingLeft = (index == 0) ? 8 : 0;
+                final double paddingRight = (index == questItems.length-1) ? 8 : 0;
+
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(paddingLeft, 0, paddingRight, 0),
+                  child: HomeShowcaseCard(
+                    title: _offering.partner.name,
+                    subtitle: "Dapatkan Rp${_offering.monetaryOffering.round()},-",
+                    backgroundImage: NetworkImage(_offering.partner.imageUrl),
+                    onPressed: () {},
+                  )
+                );
+              },
             ),
           ),
           Container(height: 12)
@@ -138,24 +199,24 @@ class HomePageState extends State<HomePage> {
             ),
             AspectRatio(
               aspectRatio: 16/7,
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  Container(width: 8),
-                  HomeShowcaseCard(
-                    title: "Feby's Breakfast",
-                    subtitle: "700m",
-                    backgroundImage: NetworkImage("http://www.thebedfordgc.com/wp-content/uploads/2019/03/burger.jpg"),
-                    onPressed: () {},
-                  ),
-                  HomeShowcaseCard(
-                    title: "Warung Ko Christzen",
-                    subtitle: "1.1km",
-                    backgroundImage: NetworkImage("http://marketeers.com/wp-content/uploads/2018/11/warung_xl-a.jpg"),
-                    onPressed: () {},
-                  ),
-                  Container(width: 8)
-                ],
+                itemCount: nearestPartnerItems.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final Partner _partner = nearestPartnerItems[index];
+                  final double paddingLeft = (index == 0) ? 8 : 0;
+                  final double paddingRight = (index == nearestPartnerItems.length-1) ? 8 : 0;
+
+                  return Padding(
+                      padding: EdgeInsets.fromLTRB(paddingLeft, 0, paddingRight, 0),
+                      child: HomeShowcaseCard(
+                        title: _partner.name,
+                        subtitle: "456m", // TODO calculate
+                        backgroundImage: NetworkImage(_partner.imageUrl),
+                        onPressed: () {},
+                      )
+                  );
+                },
               ),
             ),
             Container(height: 12)

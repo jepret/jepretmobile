@@ -68,11 +68,12 @@ class IndividualProfileTabState extends State<IndividualProfileTab> {
           ),
           Container(height: 16),
           JepretTextField(
-            hint: "Nomor Telepon",
+            hint: "Nomor Telepon Seluler",
             focusNode: _focus_mobile,
             controller: _controller_mobile,
             icon: Icon(Icons.phone),
             hasFloatingPlaceholder: true,
+            keyboardType: TextInputType.phone,
           ),
           Container(height: 16),
           JepretTextField(
@@ -81,6 +82,7 @@ class IndividualProfileTabState extends State<IndividualProfileTab> {
             controller: _controller_nik,
             icon: Icon(Icons.account_balance),
             hasFloatingPlaceholder: true,
+            keyboardType: TextInputType.number,
           )
         ],
       )
@@ -96,14 +98,7 @@ class IndividualProfileTabState extends State<IndividualProfileTab> {
             OutlinedPrimaryButton(
               text: "Simpan",
               onPressed: () {},
-            ),
-            Container(height: 16),
-            OutlinedPrimaryButton(
-              text: "Logout",
-              onPressed: () {},
-              color: Colors.red,
-              highlightedColor: Colors.red,
-            ),
+            )
           ],
         )
     );

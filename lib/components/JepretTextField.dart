@@ -8,6 +8,7 @@ class JepretTextField extends StatelessWidget {
   bool hasFloatingPlaceholder;
   TextEditingController controller;
   FocusNode focusNode;
+  TextInputType keyboardType;
 
   JepretTextField({
     this.hint,
@@ -15,7 +16,8 @@ class JepretTextField extends StatelessWidget {
     this.isPassword: false,
     this.controller,
     this.focusNode,
-    this.hasFloatingPlaceholder: false
+    this.hasFloatingPlaceholder: false,
+    this.keyboardType: TextInputType.text
   });
 
   @override
@@ -24,6 +26,7 @@ class JepretTextField extends StatelessWidget {
       controller: controller,
       focusNode: focusNode,
       obscureText: isPassword,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
           prefixIcon: icon,
           labelText: hint,
