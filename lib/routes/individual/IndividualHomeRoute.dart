@@ -3,7 +3,7 @@ import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/individual/HomePage.dart';
-import 'package:jepret/pages/individual/ProfilePage.dart';
+import 'package:jepret/pages/individual/IndividualProfilePage.dart';
 import 'package:jepret/routes/business/BusinessHomeRoute.dart';
 
 class IndividualHomeRoute extends StatefulWidget {
@@ -100,7 +100,7 @@ class IndividualHomeRouteState extends State<IndividualHomeRoute> {
       case 1:
         return Container();
       case 2:
-        return ProfilePage();
+        return IndividualProfilePage();
     }
   }
 
