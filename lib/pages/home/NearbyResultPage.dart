@@ -51,20 +51,43 @@ Widget buildListTile(BuildContext context, String item) {
   var name = umkmDetail['name'];
   var distance = umkmDetail['distance'];
   var image = umkmDetail['image'];
+  var rewardLevel = umkmDetail['rewardLevel'];
 
   return MergeSemantics(
     child: ListTile(
       isThreeLine: false,
       dense: false,
       leading: ExcludeSemantics(child: Image(height: 40, width: 40, image: NetworkImage(image))),
-      title: Text('$name'),
+      title: Text('$name', style: TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Icon(Icons.location_on),
-          Text('$distance km'),
+          Row(
+            children: <Widget>[
+              Icon(Icons.location_on, size: 18.0),
+              const SizedBox(width: 2.0),
+              Text('$distance km'),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: _renderRewardLevelStars(rewardLevel),
+          )
         ],
       ),
       trailing: Icon(Icons.arrow_forward, color: Theme.of(context).disabledColor),
     ),
   );
+}
+
+List<Widget> _renderRewardLevelStars(int rewardLevel) {
+  List<Widget> list = new List();
+  for (var i = 0; i < rewardLevel; i++) {
+    list.add(Icon(Icons.attach_money, size: 18.0, color: Colors.black54),);
+  }
+  for (var i = 0; i < 5-rewardLevel; i++) {
+    list.add(const SizedBox(width: 18.0),);
+  }
+  list.add(const SizedBox(width: 60.0),);
+  return list;
 }

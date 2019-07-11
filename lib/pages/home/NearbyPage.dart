@@ -3,12 +3,12 @@ import 'package:jepret/pages/home/NearbyResultPage.dart';
 
 bool _show = true;
 List<String> items = <String>[
-  '{"name":"Onel\'s Kitchen", "distance":"1", "image": "https://i.imgur.com/ahWbjhP.png"}',
-  '{"name":"Gabu\'s Weebs Store", "distance":"1.2", "image": "https://i.imgur.com/ahWbjhP.png"}',
-  '{"name":"Feby\'s Breakfast", "distance":"3", "image": "https://i.imgur.com/ahWbjhP.png"}',
-  '{"name":"Warung Ko Christzen", "distance":"4", "image": "https://i.imgur.com/ahWbjhP.png"}',
-  '{"name":"Didit\'s Solution", "distance":"4.1", "image": "https://i.imgur.com/ahWbjhP.png"}',
-  '{"name":"Raigor", "distance":"8.1", "image": "https://i.imgur.com/ahWbjhP.png"}'
+  '{"name":"Onel\'s Kitchen", "distance":"1", "image": "https://i.imgur.com/ahWbjhP.png", "rewardLevel": 3}',
+  '{"name":"Gabu\'s Weebs Store", "distance":"1.2", "image": "https://i.imgur.com/ahWbjhP.png", "rewardLevel": 4}',
+  '{"name":"Feby\'s Breakfast", "distance":"3", "image": "https://i.imgur.com/ahWbjhP.png", "rewardLevel": 5}',
+  '{"name":"Warung Ko Christzen", "distance":"4", "image": "https://i.imgur.com/ahWbjhP.png", "rewardLevel": 2}',
+  '{"name":"Didit\'s Solution", "distance":"4.1", "image": "https://i.imgur.com/ahWbjhP.png", "rewardLevel": 1}',
+  '{"name":"Raigor", "distance":"8.1", "image": "https://i.imgur.com/ahWbjhP.png", "rewardLevel": 0}'
 ];
 
 class NearbyPage extends StatefulWidget {
