@@ -3,6 +3,7 @@ import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/home/HomePage.dart';
+import 'package:jepret/pages/home/NearbyPage.dart';
 
 class HomeRoute extends StatefulWidget {
   HomeRouteState createState() => HomeRouteState();
@@ -69,7 +70,7 @@ class HomeRouteState extends State<HomeRoute> {
       case 0:
         return HomePage();
       case 1:
-        return null;
+        return NearbyPage();
       case 2:
         return null;
     }
