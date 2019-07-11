@@ -5,6 +5,7 @@ class Authentication {
   String nik;
   String name;
   String phoneNumber;
+  bool hasBusinessProfile;
 
   Authentication({
     this.id,
@@ -12,6 +13,7 @@ class Authentication {
     this.email,
     this.nik,
     this.name,
-    this.phoneNumber
+    this.phoneNumber,
+    this.hasBusinessProfile
   });
 }

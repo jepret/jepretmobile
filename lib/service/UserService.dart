@@ -36,7 +36,8 @@ class UserService {
       email: data['email'],
       name: data['name'],
       nik: data['id_card'],
-      phoneNumber: data['phone_number']
+      phoneNumber: data['phone_number'],
+      hasBusinessProfile: data['has_umkm']
     );
 
     return Future.value(authentication);
@@ -46,7 +47,6 @@ class UserService {
     String requestBody = json.encode({
       'name': registration.name,
       'phone_number': registration.phoneNumber,
-      //'email': registration.email,
       'id_card': registration.nik,
       'password': registration.password
     });
@@ -74,7 +74,39 @@ class UserService {
         email: data['email'],
         name: data['name'],
         nik: data['id_card'],
-        phoneNumber: data['phone_number']
+        phoneNumber: data['phone_number'],
+        hasBusinessProfile: false
+    );
+
+    return Future.value(authentication);
+  }
+
+  static Future<Authentication> refreshAuthentication(final String authToken) async {
+    http.Response response = await http.get(
+        ApiEndpoints.PROFILE_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
+
+    final String responseBody = response.body;
+    final Map<String, dynamic> map = jsonDecode(responseBody);
+
+    if(response.statusCode != 200) {
+      return Future.error(UserRegistrationException(map['message'].toString()));
+    }
+
+    final Map<String, dynamic> data = map['data'];
+
+    final Authentication authentication = Authentication(
+        id: data['id'],
+        authToken: authToken,
+        email: data['email'],
+        name: data['name'],
+        nik: data['id_card'],
+        phoneNumber: data['phone_number'],
+        hasBusinessProfile: data['has_umkm']
     );
 
     return Future.value(authentication);

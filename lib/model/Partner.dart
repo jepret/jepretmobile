@@ -4,12 +4,16 @@ class Partner {
   String partnerId;
   String name;
   String imageUrl;
+  String sector;
+  DateTime founded;
   Location location;
 
   Partner({
     this.partnerId,
     this.name,
     this.imageUrl,
-    this.location
+    this.location,
+    this.sector,
+    this.founded
   });
 }

@@ -6,6 +6,7 @@ import 'package:jepret/pages/individual/HomePage.dart';
 import 'package:jepret/pages/individual/IndividualProfilePage.dart';
 import 'package:jepret/routes/business/BusinessHomeRoute.dart';
 import 'package:jepret/routes/SettingsRoute.dart';
+import 'package:jepret/app.dart';
 
 class IndividualHomeRoute extends StatefulWidget {
   IndividualHomeRouteState createState() => IndividualHomeRouteState();
@@ -56,14 +57,24 @@ class IndividualHomeRouteState extends State<IndividualHomeRoute> {
           automaticallyImplyLeading: false,
           centerTitle: false,
           actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-              child: IconButton(
-                  onPressed: (){
-                    _switchToBusinessProfile();
-                  },
-                  icon: Icon(Icons.swap_horiz, color: JepretColor.PRIMARY_DARKER)
-              )
+            LayoutBuilder(
+              builder: (context, constraint) {
+                JepretAppState state = JepretApp.of(context);
+
+                if(!state.authentication.hasBusinessProfile) {
+                  return Container();
+                }
+
+                return Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: IconButton(
+                        onPressed: (){
+                          _switchToBusinessProfile();
+                        },
+                        icon: Icon(Icons.swap_horiz, color: JepretColor.PRIMARY_DARKER)
+                    )
+                );
+              },
             )
           ],
         );

@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:jepret/model/Partner.dart';
+import 'package:jepret/model/Location.dart';
+import 'package:jepret/model/BusinessProfile.dart';
 import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/PrimaryButton.dart';
+import 'package:jepret/service/BusinessService.dart';
 import 'package:jepret/app.dart';
+import 'package:intl/intl.dart';
 
 class CreateBusinessProfileRoute extends StatefulWidget {
   CreateBusinessProfileRouteState createState() => CreateBusinessProfileRouteState();
 }
 
 class CreateBusinessProfileRouteState extends State<CreateBusinessProfileRoute> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   FocusNode _focus_name = FocusNode();
   FocusNode _focus_sector = FocusNode();
   FocusNode _focus_founded_date = FocusNode();
   FocusNode _focus_province = FocusNode();
   FocusNode _focus_municipality = FocusNode();
   FocusNode _focus_street_address = FocusNode();
+  FocusNode _focus_image_url = FocusNode();
+  FocusNode _focus_lat = FocusNode();
+  FocusNode _focus_lon = FocusNode();
 
   TextEditingController _controller_name = TextEditingController();
   TextEditingController _controller_sector = TextEditingController();
@@ -23,10 +33,14 @@ class CreateBusinessProfileRouteState extends State<CreateBusinessProfileRoute> 
   TextEditingController _controller_province = TextEditingController();
   TextEditingController _controller_municipality = TextEditingController();
   TextEditingController _controller_street_address = TextEditingController();
+  TextEditingController _controller_image_url = TextEditingController();
+  TextEditingController _controller_lat = TextEditingController();
+  TextEditingController _controller_lon = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        key: _scaffoldKey,
+        appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: JepretColor.PRIMARY_DARKER),
           onPressed: () {
@@ -105,7 +119,9 @@ class CreateBusinessProfileRouteState extends State<CreateBusinessProfileRoute> 
                   Expanded(
                       child: PrimaryButton(
                         text: "Simpan",
-                        onPressed: () {},
+                        onPressed: () {
+                          _attemptRegister();
+                        },
                       )
                   )
                 ],
@@ -144,7 +160,17 @@ class CreateBusinessProfileRouteState extends State<CreateBusinessProfileRoute> 
               controller: _controller_founded_date,
               icon: Icon(Icons.date_range),
               hasFloatingPlaceholder: true,
+              hint: "YYYY-MM-DD",
               keyboardType: TextInputType.datetime,
+            ),
+            Container(height: 16),
+            JepretTextField(
+              label: "Tautan Foto Usaha",
+              focusNode: _focus_image_url,
+              controller: _controller_image_url,
+              icon: Icon(Icons.link),
+              hasFloatingPlaceholder: true,
+              keyboardType: TextInputType.text,
             )
           ],
         )
@@ -180,9 +206,57 @@ class CreateBusinessProfileRouteState extends State<CreateBusinessProfileRoute> 
               icon: Icon(Icons.home),
               hasFloatingPlaceholder: true,
               keyboardType: TextInputType.text,
+            ),
+            Container(height: 16),
+            JepretTextField(
+              label: "Latitude",
+              focusNode: _focus_lat,
+              controller: _controller_lat,
+              icon: Icon(Icons.gps_fixed),
+              hasFloatingPlaceholder: true,
+              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+            ),
+            Container(height: 16),
+            JepretTextField(
+              label: "Longitude",
+              focusNode: _focus_lon,
+              controller: _controller_lon,
+              icon: Icon(Icons.gps_fixed),
+              hasFloatingPlaceholder: true,
+              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
             )
           ],
         )
     );
+  }
+
+  void _attemptRegister() {
+    JepretAppState state = JepretApp.of(context);
+    final String authToken = state.authentication.authToken;
+
+    final Partner partner = Partner(
+      name: _controller_name.text,
+      sector: _controller_sector.text,
+      imageUrl: _controller_image_url.text,
+      founded: DateFormat("yyyy-MM-dd").parse(_controller_founded_date.text),
+      location: Location(
+        lat: double.parse(_controller_lat.text),
+        lon: double.parse(_controller_lon.text),
+        streetAddress: _controller_street_address.text,
+        province: _controller_province.text,
+        municipality: _controller_municipality.text
+      )
+    );
+
+    BusinessService.register(authToken, partner)
+        .then((BusinessProfile businessProfile) {
+          return state.saveBusinessProfile(businessProfile);
+        })
+        .then((_) {
+          Navigator.of(context).pop(true);
+        })
+        .catchError((dynamic e) {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(e.toString())));
+        });
   }
 }

@@ -176,6 +176,12 @@ class IndividualProfilePageState extends State<IndividualProfilePage> with After
   }
 
   Widget _renderBusinessProfileRegistrationOffer() {
+    JepretAppState state = JepretApp.of(context);
+
+    if(state.authentication.hasBusinessProfile) {
+      return Container();
+    }
+
     return Padding(
       padding: EdgeInsets.all(16),
       child: Material(

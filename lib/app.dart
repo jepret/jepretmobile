@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/constants/Preferences.dart';
 import 'package:jepret/model/Authentication.dart';
+import 'package:jepret/model/BusinessProfile.dart';
 import 'package:jepret/routes/WelcomeRoute.dart';
 import 'package:jepret/exceptions/NotAuthenticatedException.dart';
+import 'package:jepret/service/UserService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JepretApp extends StatefulWidget {
@@ -21,9 +23,14 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
   };
 
   Authentication _authentication;
+  BusinessProfile _businessProfile;
 
   Authentication get authentication {
     return _authentication;
+  }
+
+  BusinessProfile get businessProfile {
+    return _businessProfile;
   }
 
   Future<bool> isAuthenticated() async {
@@ -39,15 +46,27 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
     }
 
     final Authentication authentication = Authentication(
-      id: prefs.get(Preferences.ID),
-      name: prefs.get(Preferences.NAME),
-      nik: prefs.get(Preferences.NIK),
-      email: prefs.get(Preferences.EMAIL),
-      phoneNumber: prefs.get(Preferences.MOBILE),
-      authToken: prefs.get(Preferences.AUTH_TOKEN),
+        id: prefs.getInt(Preferences.ID),
+        name: prefs.getString(Preferences.NAME),
+        nik: prefs.getString(Preferences.NIK),
+        email: prefs.getString(Preferences.EMAIL),
+        phoneNumber: prefs.getString(Preferences.MOBILE),
+        authToken: prefs.getString(Preferences.AUTH_TOKEN),
+        hasBusinessProfile: prefs.getBool(Preferences.HAS_BUSINESS_PROFILE)
     );
 
     return authentication;
+  }
+
+  Future<BusinessProfile> getBusinessProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.get(Preferences.BUSINESS_PROFILE_JSON) == null) {
+      return Future.value(null);
+    }
+
+    final BusinessProfile profile = BusinessProfile.fromJson(prefs.get(Preferences.BUSINESS_PROFILE_JSON));
+
+    return profile;
   }
 
   Future<void> saveAuthentication(final Authentication authentication) async {
@@ -58,19 +77,39 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
     await prefs.setString(Preferences.MOBILE, authentication.phoneNumber);
     await prefs.setString(Preferences.NIK, authentication.nik);
     await prefs.setInt(Preferences.ID, authentication.id);
+    await prefs.setBool(Preferences.HAS_BUSINESS_PROFILE, authentication.hasBusinessProfile);
 
     setState(() {
       this._authentication = authentication;
     });
   }
 
+  Future<void> saveBusinessProfile(final BusinessProfile businessProfile) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(Preferences.BUSINESS_PROFILE_JSON, businessProfile.serialize());
+    await prefs.setBool(Preferences.HAS_BUSINESS_PROFILE, true);
+
+    keepAuthenticationInState();
+  }
+
   Future<void> keepAuthenticationInState() async {
     Authentication auth = await getAuthentication();
     if(auth == null) throw NotAuthenticatedException("User not authenticated");
 
+    BusinessProfile businessProfile = await getBusinessProfile();
+
     setState(() {
       this._authentication = auth;
+      this._businessProfile = businessProfile;
     });
+  }
+
+  Future<void> refreshAuthentication() async {
+    Authentication auth = await getAuthentication();
+    if(auth == null) throw NotAuthenticatedException("User not authenticated");
+
+    Authentication authentication = await UserService.refreshAuthentication(auth.authToken);
+    saveAuthentication(authentication);
   }
 
   Future<void> logout() async {
@@ -81,6 +120,8 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
     await prefs.remove(Preferences.MOBILE);
     await prefs.remove(Preferences.NIK);
     await prefs.remove(Preferences.ID);
+    await prefs.remove(Preferences.HAS_BUSINESS_PROFILE);
+    await prefs.remove(Preferences.BUSINESS_PROFILE_JSON);
   }
 
   @override

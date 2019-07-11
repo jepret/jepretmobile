@@ -4,14 +4,16 @@ import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/partials/business/BusinessDashboardVisitorLineChart.dart';
 import 'package:jepret/partials/business/BusinessDashboardReviewBarChart.dart';
 import 'package:jepret/routes/WithdrawIncentiveRoute.dart';
+import 'package:jepret/app.dart';
 import 'package:intl/intl.dart';
+import 'package:after_layout/after_layout.dart';
 
 class BusinessDashboardPage extends StatefulWidget {
   BusinessDashboardPageState createState() => BusinessDashboardPageState();
 }
 
-class BusinessDashboardPageState extends State<BusinessDashboardPage> {
-  int currentBalance = 5668456;
+class BusinessDashboardPageState extends State<BusinessDashboardPage> with AfterLayoutMixin<BusinessDashboardPage> {
+  int currentBalance = 0;
   int currentReviews = 256;
 
   Widget build(BuildContext context) {
@@ -35,6 +37,14 @@ class BusinessDashboardPageState extends State<BusinessDashboardPage> {
           ],
         )
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    JepretAppState state = JepretApp.of(context);
+    setState(() {
+      currentBalance = state.businessProfile.balance;
+    });
   }
 
   Widget _renderIncentiveHeading() {

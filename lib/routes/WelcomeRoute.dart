@@ -108,6 +108,7 @@ class WelcomeRouteState extends State<WelcomeRoute> with AfterLayoutMixin<Welcom
     JepretAppState state = JepretApp.of(context);
 
     return state.keepAuthenticationInState().then((_) {
+      state.refreshAuthentication();
       return Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, anim1, anim2) => IndividualHomeRoute(),
