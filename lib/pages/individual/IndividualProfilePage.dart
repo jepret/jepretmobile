@@ -4,6 +4,7 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
+import 'package:jepret/routes/individual/CreateBusinessProfileRoute.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:after_layout/after_layout.dart';
 
@@ -215,7 +216,11 @@ class IndividualProfilePageState extends State<IndividualProfilePage> with After
                             color: JepretColor.PRIMARY_DARKER
                           )
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => CreateBusinessProfileRoute())
+                          );
+                        },
                       )
                   )
                 ],
