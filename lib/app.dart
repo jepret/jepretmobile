@@ -52,7 +52,8 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
         email: prefs.getString(Preferences.EMAIL),
         phoneNumber: prefs.getString(Preferences.MOBILE),
         authToken: prefs.getString(Preferences.AUTH_TOKEN),
-        hasBusinessProfile: prefs.getBool(Preferences.HAS_BUSINESS_PROFILE)
+        hasBusinessProfile: prefs.getBool(Preferences.HAS_BUSINESS_PROFILE),
+        balance: prefs.getInt(Preferences.BALANCE)
     );
 
     return authentication;
@@ -78,6 +79,7 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
     await prefs.setString(Preferences.NIK, authentication.nik);
     await prefs.setInt(Preferences.ID, authentication.id);
     await prefs.setBool(Preferences.HAS_BUSINESS_PROFILE, authentication.hasBusinessProfile);
+    await prefs.setInt(Preferences.BALANCE, authentication.balance);
 
     setState(() {
       this._authentication = authentication;

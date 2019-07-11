@@ -30,9 +30,10 @@ dependencies:
   http: ^0.12.0+2
   shared_preferences: ^0.5.3+2
   after_layout: ^1.0.7+2
+  fast_qr_reader_view: ^0.1.5
   google_maps_flutter: '<=0.5.6'
-  simple_permissions: ^0.1.9
   location: '<=1.4.1'
+  permission_handler: '^3.1.0'
 
 dev_dependencies:
   flutter_test:

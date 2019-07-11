@@ -1,5 +1,6 @@
 class Authentication {
   int id;
+  int balance;
   String authToken;
   String email;
   String nik;
@@ -9,6 +10,7 @@ class Authentication {
 
   Authentication({
     this.id,
+    this.balance,
     this.authToken,
     this.email,
     this.nik,

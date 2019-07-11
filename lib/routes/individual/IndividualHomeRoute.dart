@@ -48,6 +48,14 @@ class IndividualHomeRouteState extends State<IndividualHomeRoute> {
     });
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed) {
+      JepretAppState state = JepretApp.of(context);
+      state.refreshAuthentication();
+    }
+  }
+
   Widget _renderAppBar(int index) {
     switch(index) {
       case 0:

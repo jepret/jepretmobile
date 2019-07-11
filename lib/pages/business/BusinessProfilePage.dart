@@ -4,7 +4,6 @@ import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/constants/JepretColor.dart';
-import 'package:jepret/pages/business/BusinessDashboardPage.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class BusinessProfilePage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/pages/individual/NearbyResultPage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:simple_permissions/simple_permissions.dart';
 import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 bool _show = true;
 List<String> items = <String>[
@@ -145,7 +145,7 @@ class _NearbyPageState extends State<NearbyPage> {
 }
 
 requestPermission() async {
-  await SimplePermissions.requestPermission(Permission.AlwaysLocation);
+  await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
 //  print("permission request result is " + res.toString());
 }
 
