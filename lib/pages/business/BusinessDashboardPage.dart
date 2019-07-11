@@ -6,15 +6,13 @@ import 'package:jepret/partials/business/BusinessDashboardReviewBarChart.dart';
 import 'package:jepret/routes/business/WithdrawIncentiveRoute.dart';
 import 'package:jepret/app.dart';
 import 'package:intl/intl.dart';
-import 'package:after_layout/after_layout.dart';
 
 class BusinessDashboardPage extends StatefulWidget {
   BusinessDashboardPageState createState() => BusinessDashboardPageState();
 }
 
-class BusinessDashboardPageState extends State<BusinessDashboardPage> with AfterLayoutMixin<BusinessDashboardPage> {
-  int currentBalance = 0;
-  int currentReviews = 256;
+class BusinessDashboardPageState extends State<BusinessDashboardPage> {
+  int currentReviews = 0;
 
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -39,15 +37,8 @@ class BusinessDashboardPageState extends State<BusinessDashboardPage> with After
     );
   }
 
-  @override
-  void afterFirstLayout(BuildContext context) {
-    JepretAppState state = JepretApp.of(context);
-    setState(() {
-      currentBalance = state.businessProfile.balance;
-    });
-  }
-
   Widget _renderIncentiveHeading() {
+    JepretAppState state = JepretApp.of(context);
     return Container(
         color: JepretColor.PRIMARY_DARKER,
         child: Column(
@@ -75,7 +66,7 @@ class BusinessDashboardPageState extends State<BusinessDashboardPage> with After
                         text: NumberFormat.currency(
                           locale: 'ID',
                           symbol: 'Rp'
-                        ).format(currentBalance),
+                        ).format(state.businessProfile.balance),
                         color: Colors.white
                     ),
                     Spacer(),

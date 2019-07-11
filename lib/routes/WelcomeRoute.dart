@@ -109,6 +109,7 @@ class WelcomeRouteState extends State<WelcomeRoute> with AfterLayoutMixin<Welcom
 
     return state.keepAuthenticationInState().then((_) {
       state.refreshAuthentication();
+      state.refreshBusinessProfile();
       return Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, anim1, anim2) => IndividualHomeRoute(),

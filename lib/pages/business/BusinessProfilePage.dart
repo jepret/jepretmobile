@@ -4,19 +4,25 @@ import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/constants/JepretColor.dart';
+import 'package:jepret/app.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:after_layout/after_layout.dart';
+import 'package:intl/intl.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   BusinessProfilePageState createState() => BusinessProfilePageState();
 }
 
-class BusinessProfilePageState extends State<BusinessProfilePage> {
+class BusinessProfilePageState extends State<BusinessProfilePage> with AfterLayoutMixin<BusinessProfilePage> {
   FocusNode _focus_name = FocusNode();
   FocusNode _focus_sector = FocusNode();
   FocusNode _focus_founded_date = FocusNode();
   FocusNode _focus_province = FocusNode();
   FocusNode _focus_municipality = FocusNode();
   FocusNode _focus_street_address = FocusNode();
+  FocusNode _focus_image_url = FocusNode();
+  FocusNode _focus_lat = FocusNode();
+  FocusNode _focus_lon = FocusNode();
 
   TextEditingController _controller_name = TextEditingController();
   TextEditingController _controller_sector = TextEditingController();
@@ -24,6 +30,9 @@ class BusinessProfilePageState extends State<BusinessProfilePage> {
   TextEditingController _controller_province = TextEditingController();
   TextEditingController _controller_municipality = TextEditingController();
   TextEditingController _controller_street_address = TextEditingController();
+  TextEditingController _controller_image_url = TextEditingController();
+  TextEditingController _controller_lat = TextEditingController();
+  TextEditingController _controller_lon = TextEditingController();
 
   Widget build(BuildContext context) {
     return FormKeyboardActions(
@@ -70,7 +79,24 @@ class BusinessProfilePageState extends State<BusinessProfilePage> {
     );
   }
 
+  @override
+  void afterFirstLayout(BuildContext context) {
+    JepretAppState state = JepretApp.of(context);
+
+    _controller_name.text = state.businessProfile.name;
+    _controller_sector.text = state.businessProfile.sector;
+    _controller_founded_date.text = DateFormat("yyyy-MM-dd").format(state.businessProfile.founded);
+    _controller_image_url.text = state.businessProfile.imageUrl;
+    _controller_province.text = state.businessProfile.location.province;
+    _controller_municipality.text = state.businessProfile.location.municipality;
+    _controller_street_address.text = state.businessProfile.location.streetAddress;
+    _controller_lat.text = state.businessProfile.location.lat.toString();
+    _controller_lon.text = state.businessProfile.location.lon.toString();
+  }
+
   Widget _renderInformationStatusHeader() {
+    JepretAppState state = JepretApp.of(context);
+
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
@@ -84,7 +110,7 @@ class BusinessProfilePageState extends State<BusinessProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  HeadingText(text: "Toko Sinar", color: Colors.black),
+                  HeadingText(text: state.businessProfile.name, color: Colors.black),
                   Text(
                       "Kelengkapan data: 60%",
                       style: TextStyle(
@@ -138,7 +164,7 @@ class BusinessProfilePageState extends State<BusinessProfilePage> {
           ),
           child: CircleAvatar(
             radius: 36,
-            backgroundImage: NetworkImage('http://soulofjakarta.com/images-artikel/besar/Tips-Merawat-Kulit-yang-Terkena-Paparan-Sinar-Matahari.jpg'),
+            backgroundImage: NetworkImage(state.businessProfile.imageUrl),
           ),
         )
       ],
@@ -173,7 +199,17 @@ class BusinessProfilePageState extends State<BusinessProfilePage> {
               controller: _controller_founded_date,
               icon: Icon(Icons.date_range),
               hasFloatingPlaceholder: true,
+              hint: "YYYY-MM-DD",
               keyboardType: TextInputType.datetime,
+            ),
+            Container(height: 16),
+            JepretTextField(
+              label: "Tautan Foto Usaha",
+              focusNode: _focus_image_url,
+              controller: _controller_image_url,
+              icon: Icon(Icons.link),
+              hasFloatingPlaceholder: true,
+              keyboardType: TextInputType.text,
             )
           ],
         )
@@ -209,6 +245,24 @@ class BusinessProfilePageState extends State<BusinessProfilePage> {
               icon: Icon(Icons.home),
               hasFloatingPlaceholder: true,
               keyboardType: TextInputType.text,
+            ),
+            Container(height: 16),
+            JepretTextField(
+              label: "Latitude",
+              focusNode: _focus_lat,
+              controller: _controller_lat,
+              icon: Icon(Icons.gps_fixed),
+              hasFloatingPlaceholder: true,
+              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+            ),
+            Container(height: 16),
+            JepretTextField(
+              label: "Longitude",
+              focusNode: _focus_lon,
+              controller: _controller_lon,
+              icon: Icon(Icons.gps_fixed),
+              hasFloatingPlaceholder: true,
+              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
             )
           ],
         )

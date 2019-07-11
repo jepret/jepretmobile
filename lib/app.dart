@@ -6,6 +6,7 @@ import 'package:jepret/model/BusinessProfile.dart';
 import 'package:jepret/routes/WelcomeRoute.dart';
 import 'package:jepret/exceptions/NotAuthenticatedException.dart';
 import 'package:jepret/service/UserService.dart';
+import 'package:jepret/service/BusinessService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JepretApp extends StatefulWidget {
@@ -91,7 +92,9 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
     await prefs.setString(Preferences.BUSINESS_PROFILE_JSON, businessProfile.serialize());
     await prefs.setBool(Preferences.HAS_BUSINESS_PROFILE, true);
 
-    keepAuthenticationInState();
+    setState(() {
+      this._businessProfile = businessProfile;
+    });
   }
 
   Future<void> keepAuthenticationInState() async {
@@ -112,6 +115,14 @@ class JepretAppState extends State<JepretApp> with WidgetsBindingObserver {
 
     Authentication authentication = await UserService.refreshAuthentication(auth.authToken);
     saveAuthentication(authentication);
+  }
+
+  Future<void> refreshBusinessProfile() async {
+    Authentication auth = await getAuthentication();
+    if(auth == null) throw NotAuthenticatedException("User not authenticated");
+
+    BusinessProfile businessProfile = await BusinessService.refreshBusinessProfile(auth.authToken);
+    saveBusinessProfile(businessProfile);
   }
 
   Future<void> logout() async {
