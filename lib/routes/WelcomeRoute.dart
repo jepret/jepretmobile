@@ -79,7 +79,11 @@ class WelcomeRouteState extends State<WelcomeRoute> with AfterLayoutMixin<Welcom
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext context) => RegisterRoute())
-              );
+              ).then((dynamic result) {
+                if(result == true) {
+                  _launchHomePage();
+                }
+              });
             },
           ),
           Container(height: 16),

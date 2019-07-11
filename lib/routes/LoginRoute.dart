@@ -145,10 +145,6 @@ class LoginRouteState extends State<LoginRoute> {
 
     UserService.login(_controller_nik.value.text, _controller_password.value.text)
         .then((Authentication authentication) {
-          if(authentication == null) {
-            throw new LoginFailedException("Invalid NIK and/or password");
-          }
-
           return state.saveAuthentication(authentication);
         })
         .then((_) {

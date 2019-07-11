@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:jepret/app.dart';
+import 'package:jepret/exceptions/UserRegistrationException.dart';
+import 'package:jepret/service/UserService.dart';
+import 'package:jepret/model/Registration.dart';
+import 'package:jepret/model/Authentication.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-class RegisterRoute extends StatelessWidget {
+class RegisterRoute extends StatefulWidget {
+  RegisterRouteState createState() => RegisterRouteState();
+}
+
+class RegisterRouteState extends State<RegisterRoute> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   FocusNode _focus_name = new FocusNode();
   FocusNode _focus_nik = new FocusNode();
   FocusNode _focus_mobile = new FocusNode();
@@ -20,6 +30,7 @@ class RegisterRoute extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -166,10 +177,38 @@ class RegisterRoute extends StatelessWidget {
         children: <Widget>[
           PrimaryButton(
             text: "Daftar",
-            onPressed: () {},
+            onPressed: () {
+              _attemptRegister();
+            },
           ),
         ],
       )
     );
+  }
+
+  void _attemptRegister() {
+    if(_controller_password.text != _controller_repassword.text) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Kata sandi tidak sesuai")));
+      return;
+    }
+
+    JepretAppState state = JepretApp.of(context);
+    final Registration registration = Registration(
+      nik: _controller_nik.text,
+      name: _controller_name.text,
+      password: _controller_password.text,
+      phoneNumber: _controller_mobile.text
+    );
+
+    UserService.register(registration)
+        .then((Authentication authentication) {
+          return state.saveAuthentication(authentication);
+        })
+        .then((_) {
+          Navigator.of(context).pop(true);
+        })
+        .catchError((dynamic e) {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(e.toString())));
+        });
   }
 }
