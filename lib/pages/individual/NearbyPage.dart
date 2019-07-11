@@ -3,6 +3,7 @@ import 'package:jepret/pages/individual/NearbyResultPage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_enums.dart';
 
 bool _show = true;
 List<String> items = <String>[
@@ -139,13 +140,14 @@ class _NearbyPageState extends State<NearbyPage> {
           target: _center,
           zoom: 18.0,
         ),
+
       ),
     );
   }
 }
 
 requestPermission() async {
-  await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
+  await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
 //  print("permission request result is " + res.toString());
 }
 
