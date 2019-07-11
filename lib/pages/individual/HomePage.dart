@@ -121,7 +121,7 @@ class HomePageState extends State<HomePage> {
                     text: NumberFormat.currency(
                       locale: "ID",
                       symbol: "Rp"
-                    ).format(state.authentication.balance),
+                    ).format(state.authentication.balance ?? 0),
                 color: Colors.white),
                 Spacer(),
                 Text("${currentVisits} kunjungan", style: TextStyle(color: Colors.white))

@@ -89,7 +89,7 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
                 NumberFormat.currency(
                   locale: "ID",
                   symbol: "Rp"
-                ).format(state.businessProfile.balance),
+                ).format(state.businessProfile.balance ?? 0),
                 style: TextStyle(
                   color: JepretColor.PRIMARY_DARKER,
                   fontWeight: FontWeight.bold,

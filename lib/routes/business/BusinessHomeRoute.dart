@@ -4,6 +4,7 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/business/BusinessDashboardPage.dart';
 import 'package:jepret/pages/business/BusinessProfilePage.dart';
+import 'package:jepret/pages/business/ApplyInsurancePage.dart';
 import 'package:jepret/routes/individual/IndividualHomeRoute.dart';
 import 'package:jepret/routes/SettingsRoute.dart';
 import 'package:jepret/app.dart';
@@ -77,7 +78,13 @@ class BusinessHomeRouteState extends State<BusinessHomeRoute> {
           ],
         );
       case 1:
-        return null;
+        return AppBar(
+            centerTitle: false,
+            backgroundColor: Colors.white,
+            elevation: 1,
+            automaticallyImplyLeading: false,
+            title: HeadingText(text: "Penjaminan")
+        );
       case 2:
         return AppBar(
           centerTitle: false,
@@ -112,7 +119,7 @@ class BusinessHomeRouteState extends State<BusinessHomeRoute> {
       case 0:
         return BusinessDashboardPage();
       case 1:
-        return Container();
+        return ApplyInsurancePage();
       case 2:
         return BusinessProfilePage();
     }

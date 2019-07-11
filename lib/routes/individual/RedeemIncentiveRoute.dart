@@ -97,7 +97,7 @@ class RedeemIncentiveRouteState extends State<RedeemIncentiveRoute> {
                   NumberFormat.currency(
                       locale: "ID",
                       symbol: "Rp"
-                  ).format(state.authentication.balance),
+                  ).format(state.authentication.balance ?? 00),
                   style: TextStyle(
                       color: JepretColor.PRIMARY_DARKER,
                       fontWeight: FontWeight.bold,
