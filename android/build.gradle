@@ -40,12 +40,16 @@ subprojects {
             if (details.requested.group == 'androidx.core') {
                 details.useVersion "1.0.0"
             }
-            if (details.requested.group == 'com.google.android.gms') {
+            if (details.requested.group == 'com.google.android.gms'
+                    && !details.requested.name.contains('vision-image')
+                    && !details.requested.name.contains('measurement-api')
+                    && !details.requested.name.contains('measurement-base')) {
                 details.useVersion "15.0.1"
             }
         }
         resolutionStrategy {
             force 'com.google.android.gms:play-services-maps:16.0.0'
+            force 'com.google.android.gms:play-services-vision-image-label:16.2.0'
 
 //            force 'com.google.android.gms:play-services-base:16.1.0'
 //            force 'com.google.android.gms:play-services-tasks:16.1.0'
