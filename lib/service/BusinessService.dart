@@ -1,3 +1,4 @@
+import 'package:jepret/model/Location.dart';
 import 'package:jepret/model/Partner.dart';
 import 'package:jepret/model/BusinessProfile.dart';
 import 'package:jepret/constants/ApiEndpoints.dart';
@@ -46,6 +47,45 @@ class BusinessService {
       sector: partner.sector,
       founded: partner.founded,
       location: partner.location
+    );
+
+    return Future.value(profile);
+  }
+
+  static Future<BusinessProfile> refreshBusinessProfile(final String authToken) async {
+    http.Response response = await http.get(
+        ApiEndpoints.PROFILE_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
+
+    final String responseBody = response.body;
+    final Map<String, dynamic> map = jsonDecode(responseBody);
+
+    if(response.statusCode != 200) {
+      return Future.error(Exception(map['message'].toString()));
+    }
+
+    if(map['data']['umkm'] == null) Future.error(Exception("Business profile non-existent"));
+
+    final Map<String, dynamic> data = map['data']['umkm'];
+
+    final BusinessProfile profile = BusinessProfile(
+        balance: data['balance'],
+        partnerId: data['unique_id'],
+        name: data['name'],
+        imageUrl: data['photo'],
+        sector: data['sector'],
+        founded: DateFormat("yyyy-MM-dd").parse(data['founding_date']),
+        location: Location(
+          streetAddress: data['address'],
+          municipality: data['city'],
+          province: data['province'],
+          lat: data['lat'],
+          lon: data['lng']
+        )
     );
 
     return Future.value(profile);

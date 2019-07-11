@@ -5,6 +5,8 @@ import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/business/BusinessDashboardPage.dart';
 import 'package:jepret/pages/business/BusinessProfilePage.dart';
 import 'package:jepret/routes/individual/IndividualHomeRoute.dart';
+import 'package:jepret/routes/SettingsRoute.dart';
+import 'package:jepret/app.dart';
 
 class BusinessHomeRoute extends StatefulWidget {
   BusinessHomeRouteState createState() => BusinessHomeRouteState();
@@ -37,6 +39,14 @@ class BusinessHomeRouteState extends State<BusinessHomeRoute> {
       ],
     ),
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed) {
+      JepretAppState state = JepretApp.of(context);
+      state.refreshBusinessProfile();
+    }
   }
 
   void _onTabTapped(int index) {
@@ -79,7 +89,11 @@ class BusinessHomeRouteState extends State<BusinessHomeRoute> {
             IconButton(
               icon: Icon(Icons.settings),
               color: JepretColor.PRIMARY_DARKER,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (BuildContext context) => SettingsRoute())
+                );
+              },
             )
           ]
         );

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/JepretTextField.dart';
-import 'package:jepret/partials/business/BusinessDashboardVisitorLineChart.dart';
-import 'package:jepret/partials/business/BusinessDashboardReviewBarChart.dart';
+import 'package:jepret/app.dart';
 import 'package:intl/intl.dart';
 
 class WithdrawIncentiveRoute extends StatefulWidget {
@@ -10,8 +9,6 @@ class WithdrawIncentiveRoute extends StatefulWidget {
 }
 
 class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
-  int currentBalance = 5668456;
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -72,6 +69,7 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
   }
 
   Widget _renderIncentiveHeading() {
+    JepretAppState state = JepretApp.of(context);
     return Container(
         color: Color.fromARGB(255, 245, 245, 245),
         child: Padding(
@@ -91,7 +89,7 @@ class WithdrawIncentiveRouteState extends State<WithdrawIncentiveRoute> {
                 NumberFormat.currency(
                   locale: "ID",
                   symbol: "Rp"
-                ).format(currentBalance),
+                ).format(state.businessProfile.balance),
                 style: TextStyle(
                   color: JepretColor.PRIMARY_DARKER,
                   fontWeight: FontWeight.bold,
