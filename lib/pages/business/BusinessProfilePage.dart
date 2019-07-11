@@ -14,6 +14,9 @@ class BusinessProfilePage extends StatefulWidget {
 }
 
 class BusinessProfilePageState extends State<BusinessProfilePage> with AfterLayoutMixin<BusinessProfilePage> {
+  int stepsCompleted = 3;
+  int stepsExisting = 5;
+
   FocusNode _focus_name = FocusNode();
   FocusNode _focus_sector = FocusNode();
   FocusNode _focus_founded_date = FocusNode();
@@ -112,7 +115,7 @@ class BusinessProfilePageState extends State<BusinessProfilePage> with AfterLayo
                 children: <Widget>[
                   HeadingText(text: state.businessProfile.name, color: Colors.black),
                   Text(
-                      "Kelengkapan data: 60%",
+                      "Kelengkapan data: ${stepsCompleted/stepsExisting * 100}%",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400
@@ -122,8 +125,8 @@ class BusinessProfilePageState extends State<BusinessProfilePage> with AfterLayo
                   Padding(
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: CompletionProgressBar(
-                        totalSteps: 5,
-                        completedSteps: 3,
+                        totalSteps: stepsExisting,
+                        completedSteps: stepsCompleted,
                       )
                   ),
                   Container(height: 16),
