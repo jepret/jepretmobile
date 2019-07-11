@@ -110,7 +110,26 @@ class BusinessHomeRouteState extends State<BusinessHomeRoute> {
       children: <Widget>[
         Image(image: AssetImage(Assets.LOGO), height: 24),
         Container(width: 8),
-        HeadingText(text: "Jepret UMKM")
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              fontFamily: "NunitoSans",
+              color: JepretColor.PRIMARY_DARKER,
+              fontWeight: FontWeight.bold,
+              fontSize: 24
+            ),
+            children: <TextSpan>[
+              TextSpan(text: "Jepret "),
+              TextSpan(
+                text: "UMKM",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal
+                )
+              )
+            ]
+          ),
+        )
       ],
     );
   }
