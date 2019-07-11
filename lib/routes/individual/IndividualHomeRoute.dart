@@ -3,6 +3,7 @@ import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/individual/HomePage.dart';
+import 'package:jepret/pages/individual/NearbyPage.dart';
 import 'package:jepret/pages/individual/IndividualProfilePage.dart';
 import 'package:jepret/routes/business/BusinessHomeRoute.dart';
 import 'package:jepret/routes/SettingsRoute.dart';
@@ -114,7 +115,7 @@ class IndividualHomeRouteState extends State<IndividualHomeRoute> {
       case 0:
         return HomePage();
       case 1:
-        return Container();
+        return NearbyPage();
       case 2:
         return IndividualProfilePage();
     }
