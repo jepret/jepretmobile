@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:jepret/routes/individual/IndividualHomeRoute.dart';
+import 'package:jepret/exceptions/LoginFailedException.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/ClickableText.dart';
 import 'package:jepret/constants/JepretColor.dart';
+import 'package:jepret/service/UserService.dart';
+import 'package:jepret/model/Authentication.dart';
+import 'package:jepret/app.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class LoginRoute extends StatefulWidget {
@@ -12,6 +15,7 @@ class LoginRoute extends StatefulWidget {
 }
 
 class LoginRouteState extends State<LoginRoute> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   FocusNode _focus_nik = new FocusNode();
   FocusNode _focus_password = new FocusNode();
 
@@ -20,6 +24,7 @@ class LoginRouteState extends State<LoginRoute> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -127,13 +132,31 @@ class LoginRouteState extends State<LoginRoute> {
           PrimaryButton(
             text: "Masuk",
             onPressed: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (BuildContext context) => IndividualHomeRoute())
-              );
+              _attemptLogin();
             },
           ),
         ],
       )
     );
+  }
+
+  void _attemptLogin() {
+    JepretAppState state = JepretApp.of(context);
+
+    UserService.login(_controller_nik.value.text, _controller_password.value.text)
+        .then((Authentication authentication) {
+          if(authentication == null) {
+            throw new LoginFailedException("Invalid NIK and/or password");
+          }
+
+          return state.saveAuthentication(authentication);
+        })
+        .then((_) {
+          Navigator.of(context).pop(true);
+        })
+        .catchError((_) {
+          // TODO show error
+          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("NIK dan/atau kata sandi salah")));
+        });
   }
 }

@@ -5,6 +5,7 @@ import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/pages/individual/HomePage.dart';
 import 'package:jepret/pages/individual/IndividualProfilePage.dart';
 import 'package:jepret/routes/business/BusinessHomeRoute.dart';
+import 'package:jepret/routes/SettingsRoute.dart';
 
 class IndividualHomeRoute extends StatefulWidget {
   IndividualHomeRouteState createState() => IndividualHomeRouteState();
@@ -79,7 +80,11 @@ class IndividualHomeRouteState extends State<IndividualHomeRoute> {
             IconButton(
               icon: Icon(Icons.settings),
               color: JepretColor.PRIMARY_DARKER,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) => SettingsRoute())
+                );
+              },
             )
           ]
         );

@@ -5,22 +5,50 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/routes/RegisterRoute.dart';
 import 'package:jepret/routes/LoginRoute.dart';
+import 'package:after_layout/after_layout.dart';
+import 'package:jepret/app.dart';
+import 'package:jepret/routes/WelcomeRoute.dart';
+import 'package:jepret/routes/individual/IndividualHomeRoute.dart';
 
-class WelcomeRoute extends StatelessWidget {
+class WelcomeRoute extends StatefulWidget {
+  WelcomeRouteState createState() => WelcomeRouteState();
+}
+
+class WelcomeRouteState extends State<WelcomeRoute> with AfterLayoutMixin<WelcomeRoute> {
+  bool loading = true;
+
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: null,
-      body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              _renderLogoSection(context),
-              Spacer(),
-              _renderBottomButtons(context)
-            ],
+    if(loading) {
+      return Container(color: Colors.white);
+    } else {
+      return Scaffold(
+          appBar: null,
+          body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  _renderLogoSection(context),
+                  Spacer(),
+                  _renderBottomButtons(context)
+                ],
+              )
           )
-      )
-    );
+      );
+    }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) async {
+    JepretAppState state = JepretApp.of(context);
+    state.isAuthenticated().then((bool isAuthenticated) {
+      if(isAuthenticated) {
+        return _launchHomePage();
+      } else {
+        setState(() {
+          loading = false;
+        });
+      }
+    });
   }
 
   Widget _renderLogoSection(BuildContext context) {
@@ -60,11 +88,29 @@ class WelcomeRoute extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) => LoginRoute())
-              );
+              ).then((dynamic result) {
+                if(result == true) {
+                  _launchHomePage();
+                }
+              });
             },
           )
         ],
       )
     );
+  }
+
+  Future<dynamic> _launchHomePage() {
+    JepretAppState state = JepretApp.of(context);
+
+    return state.keepAuthenticationInState().then((_) {
+      return Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, anim1, anim2) => IndividualHomeRoute(),
+            transitionsBuilder: (context, anim1, anim2, child) => FadeTransition(opacity: anim1, child: child),
+            transitionDuration: Duration(milliseconds: 250),
+          )
+      );
+    });
   }
 }

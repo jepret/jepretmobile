@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:jepret/app.dart';
 import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/constants/Assets.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:after_layout/after_layout.dart';
 
 class IndividualProfilePage extends StatefulWidget {
   IndividualProfilePageState createState() => IndividualProfilePageState();
 }
 
-class IndividualProfilePageState extends State<IndividualProfilePage> {
+class IndividualProfilePageState extends State<IndividualProfilePage> with AfterLayoutMixin<IndividualProfilePage> {
   FocusNode _focus_name = new FocusNode();
   FocusNode _focus_email = new FocusNode();
   FocusNode _focus_mobile = new FocusNode();
@@ -71,7 +73,19 @@ class IndividualProfilePageState extends State<IndividualProfilePage> {
     );
   }
 
+  @override
+  void afterFirstLayout(BuildContext context) {
+    JepretAppState state = JepretApp.of(context);
+
+    _controller_nik.text = state.authentication.nik;
+    _controller_email.text = state.authentication.email;
+    _controller_name.text = state.authentication.name;
+    _controller_mobile.text = state.authentication.phoneNumber;
+  }
+
   Widget _renderProfileHeading() {
+    JepretAppState state = JepretApp.of(context);
+
     return Container(
         color: JepretColor.PRIMARY_DARKER,
         child: Padding(
@@ -80,7 +94,7 @@ class IndividualProfilePageState extends State<IndividualProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  "Agung Boba",
+                  state.authentication.name,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -88,7 +102,7 @@ class IndividualProfilePageState extends State<IndividualProfilePage> {
                   ),
                 ),
                 Text(
-                  "3271061010010001",
+                  state.authentication.nik,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
