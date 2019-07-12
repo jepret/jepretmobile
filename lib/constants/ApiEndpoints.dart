@@ -7,5 +7,6 @@ class ApiEndpoints {
   static const CREATE_TRANSACTION_URL = "${BASE_URL}/transaction/";
   static const GET_NEARBY_UMKM = "${BASE_URL}/umkm/nearby";
   static const GET_UMKM_BY_ID = "${BASE_URL}/umkm/";
+  static const COMPLETE_UMKM_PROFILE_URL = "${BASE_URL}/umkm-detail/";
   static const CREATE_VERIFICATION = "${BASE_URL}/verification/";
 }

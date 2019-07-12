@@ -4,7 +4,6 @@ import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler/permission_enums.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jepret/app.dart';
@@ -21,8 +20,8 @@ class ReviewSteps extends StatefulWidget {
 
 class _ReviewStepsState extends State<ReviewSteps> {
   File _image;
-//  FocusNode _focus_review = new FocusNode();
-//  TextEditingController _controller_review = new TextEditingController();
+  FocusNode _focus_url = new FocusNode();
+  TextEditingController _controller_url = new TextEditingController();
   int step;
   bool step1Ans;
 
@@ -384,10 +383,10 @@ class _ReviewStepsState extends State<ReviewSteps> {
 //                      ),
                       ),
                       child: JepretTextField(
-                        label: 'Nomor Induk Kependudukan (NIK)',
+                        label: 'Image URL',
                         icon: Icon(Icons.credit_card),
-                        focusNode: _focus_nik,
-                        controller: _controller_nik,
+                        focusNode: _focus_url,
+                        controller: _controller_url,
                       ),
 //                      child: _image == null
 //                          ? Text('Tolong ambil foto.')
@@ -482,7 +481,11 @@ class _ReviewStepsState extends State<ReviewSteps> {
               width: 130,
               child: OutlinedPrimaryButton(
                 text: "Jepret",
-                onPressed: () {getImage();},
+                onPressed: () {
+                  setState(() {
+                    step = 3;
+                  });
+                },
               ),
             ),
             const SizedBox(width: 50),
@@ -651,14 +654,21 @@ class _ReviewStepsState extends State<ReviewSteps> {
   }
 
   Widget _renderRating() {
-    return Row(
-      children: <Widget>[
-        Icon(Icons.star, color: Colors.yellow, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-      ],
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          step = 4;
+        });
+      },
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.star, color: Colors.yellow, size: 54.0,),
+          Icon(Icons.star, color: Colors.black12, size: 54.0,),
+          Icon(Icons.star, color: Colors.black12, size: 54.0,),
+          Icon(Icons.star, color: Colors.black12, size: 54.0,),
+          Icon(Icons.star, color: Colors.black12, size: 54.0,),
+        ],
+      )
     );
   }
 

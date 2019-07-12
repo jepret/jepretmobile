@@ -4,6 +4,7 @@ import 'package:jepret/components/HeadingText.dart';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/PrimaryButton.dart';
 import 'package:jepret/constants/JepretColor.dart';
+import 'package:jepret/routes/business/CompleteProfileRoute.dart';
 import 'package:jepret/app.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:after_layout/after_layout.dart';
@@ -143,7 +144,11 @@ class BusinessProfilePageState extends State<BusinessProfilePage> with AfterLayo
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => CompleteProfileRoute())
+                          );
+                        },
                         child: Text(
                           "Lengkapi data",
                           style: TextStyle(

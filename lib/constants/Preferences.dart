@@ -8,4 +8,5 @@ class Preferences {
   static const HAS_BUSINESS_PROFILE = "userdata:has_business_profile";
   static const BALANCE = "userdata:balance";
   static const BUSINESS_PROFILE_JSON = "userdata:business_profile";
+  static const PROFILE_COMPLETION = "business:profile_completion";
 }

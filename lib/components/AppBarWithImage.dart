@@ -50,7 +50,12 @@ class _AppBarWithImageState extends State<AppBarWithImage> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.arrow_back, color: Colors.white),
+                          IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
                           const SizedBox(height: 40.00),
                           HeadingText(text: "Christzen's Steakhouse", color: Colors.white),
                           Text("Jl. Mega Kuningan Barat No. 3", style: TextStyle(color: Colors.white)),
