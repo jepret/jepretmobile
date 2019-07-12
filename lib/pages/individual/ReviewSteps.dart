@@ -4,7 +4,6 @@ import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler/permission_enums.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jepret/app.dart';
@@ -20,8 +19,8 @@ class ReviewSteps extends StatefulWidget {
 
 class _ReviewStepsState extends State<ReviewSteps> {
   File _image;
-//  FocusNode _focus_review = new FocusNode();
-//  TextEditingController _controller_review = new TextEditingController();
+  FocusNode _focus_url = new FocusNode();
+  TextEditingController _controller_url = new TextEditingController();
   int step;
   int rating;
   bool step1Ans;
@@ -477,7 +476,11 @@ class _ReviewStepsState extends State<ReviewSteps> {
               width: 130,
               child: OutlinedPrimaryButton(
                 text: "Jepret",
-                onPressed: () {getImage();},
+                onPressed: () {
+                  setState(() {
+                    step = 3;
+                  });
+                },
               ),
             ),
             const SizedBox(width: 50),
@@ -646,7 +649,6 @@ class _ReviewStepsState extends State<ReviewSteps> {
   }
 
   Widget _renderRating() {
-
     return Row(
       children: <Widget>[
         GestureDetector(
@@ -912,7 +914,9 @@ class _ReviewStepsState extends State<ReviewSteps> {
           children: <Widget>[
             OutlinedPrimaryButton(
               text: "Kirim",
-              onPressed: () {},
+              onPressed: () {
+                _attemptSubmit();
+              },
             )
           ],
         )
@@ -934,5 +938,27 @@ class _ReviewStepsState extends State<ReviewSteps> {
           'Authorization': authToken
         }
     );
+  }
+
+  void _attemptSubmit() {
+    JepretAppState state = JepretApp.of(context);
+
+    dynamic body = {
+      'umkm': 1,
+      'photo': _controller_url.text,
+      'qas': [
+        {
+          'question': 'Is it a restaurant?',
+          'answer': 'Ya'
+        }
+        ]
+    };
+
+    http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': state.authentication.authToken
+    }).then((_) {
+      Navigator.of(context).pop();
+    });
   }
 }
