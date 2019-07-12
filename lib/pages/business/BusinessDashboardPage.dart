@@ -66,7 +66,7 @@ class BusinessDashboardPageState extends State<BusinessDashboardPage> {
                         text: NumberFormat.currency(
                           locale: 'ID',
                           symbol: 'Rp'
-                        ).format(state.businessProfile.balance),
+                        ).format(state.businessProfile.balance ?? 0),
                         color: Colors.white
                     ),
                     Spacer(),
