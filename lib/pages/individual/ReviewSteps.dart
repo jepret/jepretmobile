@@ -874,7 +874,9 @@ class _ReviewStepsState extends State<ReviewSteps> {
           children: <Widget>[
             OutlinedPrimaryButton(
               text: "Kirim",
-              onPressed: () {},
+              onPressed: () {
+                _attemptSubmit();
+              },
             )
           ],
         )
@@ -896,5 +898,27 @@ class _ReviewStepsState extends State<ReviewSteps> {
           'Authorization': authToken
         }
     );
+  }
+
+  void _attemptSubmit() {
+    JepretAppState state = JepretApp.of(context);
+
+    dynamic body = {
+      'umkm': 1,
+      'photo': _controller_url.text,
+      'qas': [
+        {
+          'question': 'Is it a restaurant?',
+          'answer': 'Ya'
+        }
+        ]
+    };
+
+    http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': state.authentication.authToken
+    }).then((_) {
+      Navigator.of(context).pop();
+    });
   }
 }
