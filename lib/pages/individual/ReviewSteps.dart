@@ -10,7 +10,6 @@ import 'dart:convert';
 import 'package:jepret/app.dart';
 import 'package:jepret/constants/ApiEndpoints.dart';
 import 'dart:io';
-import 'package:jepret/components/JepretTextField.dart';
 
 class ReviewSteps extends StatefulWidget {
   ReviewSteps() : super();
@@ -24,6 +23,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
 //  FocusNode _focus_review = new FocusNode();
 //  TextEditingController _controller_review = new TextEditingController();
   int step;
+  int rating;
   bool step1Ans;
 
   @override
@@ -31,18 +31,19 @@ class _ReviewStepsState extends State<ReviewSteps> {
     super.initState();
 
     this.setState(() {
-      step = 1;
+      step = 3;
+      rating = 0;
       _image = null;
     });
   }
 
-//  Future getImage() async {
-//    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-//
-//    setState(() {
-//      _image = image;
-//    });
-//  }
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -383,15 +384,9 @@ class _ReviewStepsState extends State<ReviewSteps> {
 //                        bottomLeft: new Radius.circular(20.0),
 //                      ),
                       ),
-                      child: JepretTextField(
-                        label: 'Nomor Induk Kependudukan (NIK)',
-                        icon: Icon(Icons.credit_card),
-                        focusNode: _focus_nik,
-                        controller: _controller_nik,
-                      ),
-//                      child: _image == null
-//                          ? Text('Tolong ambil foto.')
-//                          : Image.file(_image),
+                      child: _image == null
+                          ? Text('Tolong ambil foto.')
+                          : Image.file(_image),
                     ),
                     const SizedBox(width: 50,)
                   ],
@@ -651,13 +646,66 @@ class _ReviewStepsState extends State<ReviewSteps> {
   }
 
   Widget _renderRating() {
+
     return Row(
       children: <Widget>[
-        Icon(Icons.star, color: Colors.yellow, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
-        Icon(Icons.star, color: Colors.black12, size: 54.0,),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: rating < 1 ? Colors.black12 : Colors.yellow,
+            size: 54.0,
+          ),
+          onTap: () {
+            setState(() {
+              rating = 1;
+            });
+          },
+        ),
+        GestureDetector(
+          child: Icon(Icons.star,
+            color: rating < 2 ? Colors.black12 : Colors.yellow,
+            size: 54.0,
+          ),
+          onTap: () {
+            setState(() {
+              rating = 2;
+            });
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: rating < 3 ? Colors.black12 : Colors.yellow,
+            size: 54.0,
+          ),
+          onTap: () {
+            setState(() {
+              rating = 3;
+            });
+          },
+        ),
+        GestureDetector(
+          child: Icon(Icons.star,
+            color: rating < 4 ? Colors.black12 : Colors.yellow,
+            size: 54.0,
+          ),
+          onTap: () {
+            setState(() {
+              rating = 4;
+            });
+          },
+        ),
+        GestureDetector(
+          child: Icon(Icons.star,
+            color: rating < 5 ? Colors.black12 : Colors.yellow,
+            size: 54.0,
+          ),
+          onTap: () {
+            setState(() {
+              rating = 5;
+            });
+          },
+        ),
       ],
     );
   }
