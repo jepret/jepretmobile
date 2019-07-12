@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class NearbyResultPage extends StatefulWidget {
-  List<String> items;
-  NearbyResultPage({@required this.items}) : super();
+  List<dynamic> items;
+  Function onHandleTap;
+  NearbyResultPage({@required this.items, @required this.onHandleTap}) : super();
 
   @override
-  _NearbyResultPageState createState() => _NearbyResultPageState(items: this.items);
+  _NearbyResultPageState createState() => _NearbyResultPageState(items: this.items, onHandleTap: this.onHandleTap);
 }
 
 class _NearbyResultPageState extends State<NearbyResultPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final List<String> items;
-  _NearbyResultPageState({@required this.items});
+  final List<dynamic> items;
+  final Function onHandleTap;
+  _NearbyResultPageState({@required this.items, @required this.onHandleTap});
 
   openPersistentBottomController(BuildContext context){
     int count = items.length;
@@ -35,7 +37,7 @@ class _NearbyResultPageState extends State<NearbyResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    Iterable<Widget> listTiles = items.map<Widget>((String item) => buildListTile(context, item));
+    Iterable<Widget> listTiles = items.map<Widget>((dynamic item) => buildListTile(context, item, onHandleTap));
     return Scaffold(
       key: _scaffoldKey,
       body: ListView(
@@ -46,12 +48,13 @@ class _NearbyResultPageState extends State<NearbyResultPage> {
   }
 }
 
-Widget buildListTile(BuildContext context, String item) {
-  Map umkmDetail = jsonDecode(item);
-  var name = umkmDetail['name'];
-  var distance = umkmDetail['distance'];
-  var image = umkmDetail['image'];
-  var rewardLevel = umkmDetail['rewardLevel'];
+Widget buildListTile(BuildContext context, dynamic item, Function onHandleTap) {
+//  Map umkmDetail = jsonDecode(item);
+  var name = item['name'];
+//  var distance = umkmDetail['distance'];
+  var distance = '1';
+  var image = item['photo'];
+  var rewardLevel = item['reward_level'];
 
   return MergeSemantics(
     child: ListTile(
@@ -76,6 +79,7 @@ Widget buildListTile(BuildContext context, String item) {
         ],
       ),
       trailing: Icon(Icons.arrow_forward, color: Theme.of(context).disabledColor),
+      onTap: () {onHandleTap(item['id']);},
     ),
   );
 }

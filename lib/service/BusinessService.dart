@@ -68,9 +68,10 @@ class BusinessService {
       return Future.error(Exception(map['message'].toString()));
     }
 
-    if(map['data']['umkm'] == null) Future.error(Exception("Business profile non-existent"));
+    if(!map['data']['has_umkm']) Future.error(Exception("Business profile non-existent"));
 
     final Map<String, dynamic> data = map['data']['umkm'];
+    print(data);
 
     final BusinessProfile profile = BusinessProfile(
         balance: data['balance'],

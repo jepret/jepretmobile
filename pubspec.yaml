@@ -57,6 +57,10 @@ flutter:
    - assets/img/quest.png
    - assets/img/surprise-box.png
    - assets/img/promotion.png
+   - assets/img/nodollar.png
+   - assets/img/dollar.png
+   - assets/img/dollars.png
+   - assets/img/dollarss.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
