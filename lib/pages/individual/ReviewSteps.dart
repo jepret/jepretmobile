@@ -25,6 +25,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
   File _image;
   TextEditingController _controller_url = new TextEditingController();
   int step;
+  int lastStep;
   int rating;
   bool step1Ans;
   Partner partner;
@@ -37,6 +38,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
 
     this.setState(() {
       step = 1;
+      lastStep = 0;
       rating = 0;
       _image = null;
     });
@@ -84,6 +86,11 @@ class _ReviewStepsState extends State<ReviewSteps> {
                     step1Ans = true;
                     step = 2;
                   });
+                  if (lastStep < 1) {
+                    this.setState(() {
+                      lastStep = 1;
+                    });
+                  }
                 },
               ),
             ),
@@ -96,6 +103,11 @@ class _ReviewStepsState extends State<ReviewSteps> {
                     step1Ans = false;
                     step = 2;
                   });
+                  if (lastStep < 1) {
+                    this.setState(() {
+                      lastStep = 1;
+                    });
+                  }
                 },
               ),
             ),
@@ -501,6 +513,11 @@ class _ReviewStepsState extends State<ReviewSteps> {
                   setState(() {
                     step = 3;
                   });
+                  if (lastStep < 2) {
+                    this.setState(() {
+                      lastStep = 2;
+                    });
+                  }
                 },
               ),
             ),
@@ -950,7 +967,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
             OutlinedPrimaryButton(
               text: "Kirim",
               onPressed: () {
-                _attemptSubmit();
+                if (lastStep >= 2) _attemptSubmit();
               },
             )
           ],
@@ -977,16 +994,25 @@ class _ReviewStepsState extends State<ReviewSteps> {
 
   void _attemptSubmit() {
     JepretAppState state = JepretApp.of(context);
+    String sector = partner.sector;
+    String photo = '';
 
+//    _uploadPhoto().then((response) {
+//      photo = response.body.unique_id;
+//    });
+    getUploadImg(_image).then((response) {
+      photo = ApiEndpoints.UPLOAD_FILE + response.unique_id;
+      print(photo);
+    });
     dynamic body = {
-      'umkm': 1,
-      'photo': _controller_url.text,
+      'umkm': partner.partnerId,
+      'photo': photo,
       'qas': [
         {
-          'question': 'Is it a restaurant?',
-          'answer': 'Ya'
+          'question': 'Is it a $sector?',
+          'answer': step1Ans ? 'Ya' : 'Tidak',
         }
-        ]
+      ]
     };
 
     http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
@@ -996,4 +1022,34 @@ class _ReviewStepsState extends State<ReviewSteps> {
       Navigator.of(context).pop();
     });
   }
-}
+
+  _uploadPhoto() async {
+    JepretAppState state = JepretApp.of(context);
+
+    Map<String, String> headers = { "Authorization": state.authentication.authToken};
+    var uri = Uri.parse(ApiEndpoints.UPLOAD_FILE);
+    var request = new http.MultipartRequest("POST", uri);
+    request.headers.addAll(headers);
+
+    request.files.add(new http.MultipartFile.fromBytes(
+        'file',
+        await _image.readAsBytes()));
+    var response = await request.send();
+    if (response.statusCode == 200) print('Uploaded!');
+    return (response);
+  }
+
+  Future getUploadImg(File _image) async {
+    JepretAppState state = JepretApp.of(context);
+    Map<String, String> headers = { "Authorization": state.authentication.authToken};
+    String apiUrl = ApiEndpoints.UPLOAD_FILE;
+    final length = await _image.length();
+
+    final multipartRequest = new http.MultipartRequest('POST', Uri.parse(apiUrl))
+      ..files.add(new http.MultipartFile('avatar', _image.openRead(), length));
+    http.Response response = await http.Response.fromStream(await multipartRequest.send());
+    print("Result: ${response.body}");
+    multipartRequest.headers.addAll(headers);
+
+    return json.decode(response.body);
+  }}

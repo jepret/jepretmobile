@@ -298,6 +298,7 @@ class _NearbyPageState extends State<NearbyPage> {
     final Map<String, dynamic> data = map['data'];
 
     final Partner partner = Partner(
+        partnerId: data['id'],
         name: data['name'],
         sector: data['sector'],
         imageUrl: data['photo'],
