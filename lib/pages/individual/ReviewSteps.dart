@@ -995,15 +995,15 @@ class _ReviewStepsState extends State<ReviewSteps> {
   void _attemptSubmit() {
     JepretAppState state = JepretApp.of(context);
     String sector = partner.sector;
-    String photo = '';
+    String photo = ApiEndpoints.GET_FILE + 'atUMuVpXNKKeBdLUnQfjoHZTseFOez';
 
 //    _uploadPhoto().then((response) {
 //      photo = response.body.unique_id;
 //    });
-    getUploadImg(_image).then((response) {
-      photo = ApiEndpoints.UPLOAD_FILE + response.unique_id;
-      print(photo);
-    });
+//    getUploadImg(_image).then((response) {
+//      photo = ApiEndpoints.UPLOAD_FILE + response.unique_id;
+//      print(photo);
+//    });
     dynamic body = {
       'umkm': partner.partnerId,
       'photo': photo,
