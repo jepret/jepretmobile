@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:jepret/pages/individual/Review.dart';
 import 'dart:convert';
 
 class NearbyResultPage extends StatefulWidget {
   List<dynamic> items;
-  Function onHandleTap;
-  NearbyResultPage({@required this.items, @required this.onHandleTap}) : super();
+  NearbyResultPage({@required this.items}) : super();
 
   @override
-  _NearbyResultPageState createState() => _NearbyResultPageState(items: this.items, onHandleTap: this.onHandleTap);
+  _NearbyResultPageState createState() => _NearbyResultPageState(items: this.items);
 }
 
 class _NearbyResultPageState extends State<NearbyResultPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<dynamic> items;
-  final Function onHandleTap;
-  _NearbyResultPageState({@required this.items, @required this.onHandleTap});
+  _NearbyResultPageState({@required this.items});
 
   openPersistentBottomController(BuildContext context){
     int count = items.length;
@@ -37,7 +36,7 @@ class _NearbyResultPageState extends State<NearbyResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    Iterable<Widget> listTiles = items.map<Widget>((dynamic item) => buildListTile(context, item, onHandleTap));
+    Iterable<Widget> listTiles = items.map<Widget>((dynamic item) => buildListTile(context, item));
     return Scaffold(
       key: _scaffoldKey,
       body: ListView(
@@ -48,7 +47,7 @@ class _NearbyResultPageState extends State<NearbyResultPage> {
   }
 }
 
-Widget buildListTile(BuildContext context, dynamic item, Function onHandleTap) {
+Widget buildListTile(BuildContext context, dynamic item) {
 //  Map umkmDetail = jsonDecode(item);
   var name = item['name'];
 //  var distance = umkmDetail['distance'];
@@ -79,7 +78,11 @@ Widget buildListTile(BuildContext context, dynamic item, Function onHandleTap) {
         ],
       ),
       trailing: Icon(Icons.arrow_forward, color: Theme.of(context).disabledColor),
-      onTap: () {onHandleTap(item['id']);},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => Review())
+        );
+      },
     ),
   );
 }

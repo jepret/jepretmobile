@@ -62,7 +62,6 @@ class _NearbyPageState extends State<NearbyPage> {
         this.lng = temp['longitude'];
       });
       build(context);
-      dummy();
     });
   }
 
@@ -89,8 +88,6 @@ class _NearbyPageState extends State<NearbyPage> {
         this.lat = temp['latitude'];
         this.lng = temp['longitude'];
       });
-
-      dummy();
     });
 
     generateUserMarker();
@@ -130,7 +127,7 @@ class _NearbyPageState extends State<NearbyPage> {
                   maxHeight: MediaQuery.of(context).size.width * 0.50,
                   maxWidth: MediaQuery.of(context).size.width * 1.00,
                 ),
-                child: NearbyResultPage(items: itemss, onHandleTap: this.onUMKMReview)
+                child: NearbyResultPage(items: itemss)
             )
           ],
         ),
@@ -141,8 +138,8 @@ class _NearbyPageState extends State<NearbyPage> {
     });
   }
 
-  void onUMKMReview(BuildContext context, int user_id) {
-    getUMKMById(context, user_id).then((response){
+  void onUMKMReview(int user_id) {
+    getUMKMById(user_id).then((response){
       var temp = jsonDecode(response.body);
       print(response.body);
       print(temp);
@@ -209,7 +206,9 @@ class _NearbyPageState extends State<NearbyPage> {
       infoWindow: InfoWindow(
         title: detail['name'],
         snippet: detail['address'],
-        onTap: () {onUMKMReview(context, detail['id']);},
+        onTap: () {
+          onUMKMReview(detail['id']);
+        },
       ),
 //      icon: BitmapDescriptor.defaultMarker,
       icon: BitmapDescriptor.fromAsset(dollarAsset),
@@ -220,7 +219,6 @@ class _NearbyPageState extends State<NearbyPage> {
   Widget build(BuildContext context) {
     int count = itemss.length;
     requestPermission();
-    print('BUILDINGGG');
     print(_markers);
 
     return Scaffold(
@@ -255,60 +253,42 @@ class _NearbyPageState extends State<NearbyPage> {
       ),
     );
   }
-}
 
-requestPermission() async {
-  await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
-//  print("permission request result is " + res.toString());
-}
+  requestPermission() async {
+    await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
+  }
 
-getCurrentLocation(loc) async {
-  return await loc.getLocation();
-}
+  getCurrentLocation(loc) async {
+    return await loc.getLocation();
+  }
 
-getNearbyUMKM(BuildContext context, double lat, double lng) async {
-  JepretAppState state = JepretApp.of(context);
-  final String authToken = state.authentication.authToken;
+  getNearbyUMKM(BuildContext context, double lat, double lng) async {
+    JepretAppState state = JepretApp.of(context);
+    final String authToken = state.authentication.authToken;
 
-  return await http.post(
-      ApiEndpoints.GET_NEARBY_UMKM,
-      body: json.encode({
-        'lat': lat,
-        'lng': lng
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authToken
-      }
-  );
-}
+    return await http.post(
+        ApiEndpoints.GET_NEARBY_UMKM,
+        body: json.encode({
+          'lat': lat,
+          'lng': lng
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
+  }
 
-getUMKMById(BuildContext context, int id) async {
-  JepretAppState state = JepretApp.of(context);
-  final String authToken = state.authentication.authToken;
+  getUMKMById(int id) async {
+    JepretAppState state = JepretApp.of(context);
+    final String authToken = state.authentication.authToken;
 
-  return await http.get(
-      ApiEndpoints.GET_UMKM_BY_ID + id.toString(),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authToken
-      }
-  );
-}
-
-class dummy extends StatefulWidget {
-  @override
-  _dummyState createState() => new _dummyState();
-}
-
-class _dummyState extends State<dummy> {
-  int _temp;
-
-  @override
-  Widget build(BuildContext context) {
-    setState((){
-      _temp = _temp + 1;
-    });
-    return Container();
+    return await http.get(
+        ApiEndpoints.GET_UMKM_BY_ID + id.toString(),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
   }
 }
