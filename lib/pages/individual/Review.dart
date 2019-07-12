@@ -40,28 +40,6 @@ class _ReviewState extends State<Review> {
                 child: Column(
                   children: <Widget>[
                     ReviewSteps(),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  _renderBottomButton()
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),
@@ -72,17 +50,3 @@ class _ReviewState extends State<Review> {
   }
 }
 
-Widget _renderBottomButton() {
-  return Padding(
-      padding: EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          OutlinedPrimaryButton(
-            text: "Kirim",
-            onPressed: () {},
-          )
-        ],
-      )
-  );
-}

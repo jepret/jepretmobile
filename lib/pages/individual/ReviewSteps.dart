@@ -4,6 +4,13 @@ import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler/permission_enums.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:jepret/app.dart';
+import 'package:jepret/constants/ApiEndpoints.dart';
+import 'dart:io';
+import 'package:jepret/components/JepretTextField.dart';
 
 class ReviewSteps extends StatefulWidget {
   ReviewSteps() : super();
@@ -13,8 +20,9 @@ class ReviewSteps extends StatefulWidget {
 }
 
 class _ReviewStepsState extends State<ReviewSteps> {
-  FocusNode _focus_review = new FocusNode();
-  TextEditingController _controller_review = new TextEditingController();
+  File _image;
+//  FocusNode _focus_review = new FocusNode();
+//  TextEditingController _controller_review = new TextEditingController();
   int step;
   bool step1Ans;
 
@@ -24,8 +32,17 @@ class _ReviewStepsState extends State<ReviewSteps> {
 
     this.setState(() {
       step = 1;
+      _image = null;
     });
   }
+
+//  Future getImage() async {
+//    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+//
+//    setState(() {
+//      _image = image;
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +55,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
             _renderStep2(context, step),
             _renderStep3(context, step),
             _renderStep4(context, step),
+            _renderBottom()
           ],
         ),
       ),
@@ -365,7 +383,15 @@ class _ReviewStepsState extends State<ReviewSteps> {
 //                        bottomLeft: new Radius.circular(20.0),
 //                      ),
                       ),
-                      child: Image(image: NetworkImage("https://img.sndimg.com/food/image/upload/w_560,h_315,c_fill,fl_progressive,q_80/v1/img/recipes/53/74/76/83kDuWs7QsCf4oZ0rhFs_0S9A7513.jpg"),),
+                      child: JepretTextField(
+                        label: 'Nomor Induk Kependudukan (NIK)',
+                        icon: Icon(Icons.credit_card),
+                        focusNode: _focus_nik,
+                        controller: _controller_nik,
+                      ),
+//                      child: _image == null
+//                          ? Text('Tolong ambil foto.')
+//                          : Image.file(_image),
                     ),
                     const SizedBox(width: 50,)
                   ],
@@ -456,7 +482,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
               width: 130,
               child: OutlinedPrimaryButton(
                 text: "Jepret",
-                onPressed: () {},
+                onPressed: () {getImage();},
               ),
             ),
             const SizedBox(width: 50),
@@ -722,13 +748,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.of(context).size.width * 0.70,
                       ),
-                      child: JepretTextField(
-//                      label: "Nama Lengkap",
-                        focusNode: _focus_review,
-                        controller: _controller_review,
-//                      icon: Icon(Icons.person_outline),
-                        hasFloatingPlaceholder: true,
-                      ),
+                      child: Container(),
                     )
                   ],
                 ),
@@ -806,9 +826,65 @@ class _ReviewStepsState extends State<ReviewSteps> {
     }
     return content;
   }
-}
 
-requestPermission() async {
-  await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
-//  print("permission request result is " + res.toString());
+  requestPermission() async {
+    await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
+  }
+
+  Widget _renderBottom() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _renderBottomButton()
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _renderBottomButton() {
+    return Padding(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            OutlinedPrimaryButton(
+              text: "Kirim",
+              onPressed: () {},
+            )
+          ],
+        )
+    );
+  }
+
+  getNearbyUMKM(BuildContext context, double lat, double lng) async {
+    JepretAppState state = JepretApp.of(context);
+    final String authToken = state.authentication.authToken;
+
+    return await http.post(
+        ApiEndpoints.CREATE_VERIFICATION,
+        body: json.encode({
+          'lat': lat,
+          'lng': lng
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
+  }
 }
