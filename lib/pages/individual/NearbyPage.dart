@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/pages/individual/NearbyResultPage.dart';
+import 'package:jepret/model/Partner.dart';
+import 'package:jepret/model/Location.dart' as JepretModelLocation;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,7 +11,6 @@ import 'package:jepret/constants/ApiEndpoints.dart';
 import 'dart:convert';
 import 'package:jepret/app.dart';
 import 'package:jepret/pages/individual/Review.dart';
-//import 'package:jepret/model/Location.dart';
 
 bool _show = true;
 List<String> items = <String>[
@@ -139,16 +140,12 @@ class _NearbyPageState extends State<NearbyPage> {
   }
 
   void onUMKMReview(int user_id) {
-    getUMKMById(user_id).then((response){
-      var temp = jsonDecode(response.body);
-      print(response.body);
-      print(temp);
+    getUMKMById(user_id).then((Partner partner) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Review()),
+        MaterialPageRoute(builder: (context) => Review(partner)),
       );
     });
-
   }
 
   void hideBottomSheet() {
@@ -279,16 +276,40 @@ class _NearbyPageState extends State<NearbyPage> {
     );
   }
 
-  getUMKMById(int id) async {
+  Future<Partner> getUMKMById(int id) async {
     JepretAppState state = JepretApp.of(context);
     final String authToken = state.authentication.authToken;
 
-    return await http.get(
-        ApiEndpoints.GET_UMKM_BY_ID + id.toString(),
+    http.Response response = await http.get(
+        "${ApiEndpoints.GET_UMKM_BY_ID}/${id}",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': authToken
         }
     );
+
+    final String responseBody = response.body;
+    final Map<String, dynamic> map = jsonDecode(responseBody);
+
+    if(response.statusCode != 200) {
+      return Future.error(Exception(map['message'].toString()));
+    }
+
+    final Map<String, dynamic> data = map['data'];
+
+    final Partner partner = Partner(
+        name: data['name'],
+        sector: data['sector'],
+        imageUrl: data['photo'],
+        location: JepretModelLocation.Location(
+            lat: data['lat'],
+            lon: data['lng'],
+            streetAddress: data['address'],
+            province: data['province'],
+            municipality: data['city']
+        )
+    );
+
+    return partner;
   }
 }

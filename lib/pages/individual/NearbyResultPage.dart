@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/pages/individual/Review.dart';
+import 'package:jepret/model/Partner.dart';
+import 'package:jepret/model/Location.dart';
 import 'dart:convert';
 
 class NearbyResultPage extends StatefulWidget {
@@ -55,6 +57,19 @@ Widget buildListTile(BuildContext context, dynamic item) {
   var image = item['photo'];
   var rewardLevel = item['reward_level'];
 
+  final Partner partner = Partner(
+      name: item['name'],
+      sector: item['sector'],
+      imageUrl: item['photo'],
+      location: Location(
+          lat: item['lat'],
+          lon: item['lng'],
+          streetAddress: item['address'],
+          province: item['province'],
+          municipality: item['city']
+      )
+  );
+
   return MergeSemantics(
     child: ListTile(
       isThreeLine: false,
@@ -80,7 +95,7 @@ Widget buildListTile(BuildContext context, dynamic item) {
       trailing: Icon(Icons.arrow_forward, color: Theme.of(context).disabledColor),
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => Review())
+          MaterialPageRoute(builder: (context) => Review(partner))
         );
       },
     ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/constants/JepretColor.dart';
-import 'package:jepret/components/JepretTextField.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
+import 'package:jepret/model/Partner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler/permission_enums.dart';
 import 'package:http/http.dart' as http;
@@ -9,28 +9,34 @@ import 'dart:convert';
 import 'package:jepret/app.dart';
 import 'package:jepret/constants/ApiEndpoints.dart';
 import 'dart:io';
+import 'package:jepret/components/JepretTextField.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ReviewSteps extends StatefulWidget {
-  ReviewSteps() : super();
+  Partner partner;
+
+  ReviewSteps(this.partner);
 
   @override
-  _ReviewStepsState createState() => _ReviewStepsState();
+  _ReviewStepsState createState() => _ReviewStepsState(partner);
 }
 
 class _ReviewStepsState extends State<ReviewSteps> {
   File _image;
-  FocusNode _focus_url = new FocusNode();
   TextEditingController _controller_url = new TextEditingController();
   int step;
   int rating;
   bool step1Ans;
+  Partner partner;
+
+  _ReviewStepsState(this.partner);
 
   @override
   void initState() {
     super.initState();
 
     this.setState(() {
-      step = 3;
+      step = 1;
       rating = 0;
       _image = null;
     });
@@ -172,7 +178,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Text("Pertanyaan 1 dari 2"),
+                    Text("Pertanyaan 1 dari 1"),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -222,69 +228,76 @@ class _ReviewStepsState extends State<ReviewSteps> {
       );
     }
     else {
-      content = Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                decoration: new BoxDecoration(
-                  border: new Border.all(
-                      color: Colors.black12,
-                      width: 3.5,
-                      style: BorderStyle.solid
+      content = GestureDetector(
+        onTap: () {
+          setState(() {
+            this.step = 1;
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                        color: Colors.black12,
+                        width: 3.5,
+                        style: BorderStyle.solid
+                    ),
+                    color: Color.fromARGB(18, 0, 0, 0),
+                    shape: BoxShape.circle,
                   ),
-                  color: Color.fromARGB(18, 0, 0, 0),
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                child: Text(
-                  "1",
-                  style: TextStyle(
-                      color: Colors.black12,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Text(
+                    "1",
+                    style: TextStyle(
+                        color: Colors.black12,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8.00,),
-              Column(
-                children: <Widget>[
-                  Container(
-                      width: 200.00,
-                      height: 30.00,
-                      decoration: new BoxDecoration(
+                const SizedBox(width: 8.00,),
+                Column(
+                  children: <Widget>[
+                    Container(
+                        width: 200.00,
+                        height: 30.00,
+                        decoration: new BoxDecoration(
 //                      color: JepretColor.PRIMARY_DARKER,
-                        borderRadius: new BorderRadius.only(
-                          topLeft: new Radius.circular(20.0),
-                          topRight: new Radius.circular(20.0),
-                          bottomRight: new Radius.circular(20.0),
-                          bottomLeft: new Radius.circular(20.0),
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
-                      child: Row(
-                        children: <Widget>[
-                          const SizedBox(width: 10.00),
-                          Text(
-                            "Pertanyaan Singkat",
-                            style: TextStyle(
-                              color: Colors.black38,
-                              fontSize: 15,
-                            ),
+                          borderRadius: new BorderRadius.only(
+                            topLeft: new Radius.circular(20.0),
+                            topRight: new Radius.circular(20.0),
+                            bottomRight: new Radius.circular(20.0),
+                            bottomLeft: new Radius.circular(20.0),
                           ),
-                        ],
-                      )
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                        ),
+                        padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 10.00),
+                            Text(
+                              "Pertanyaan Singkat",
+                              style: TextStyle(
+                                color: Colors.black38,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        )
       );
     }
     return content;
@@ -398,69 +411,76 @@ class _ReviewStepsState extends State<ReviewSteps> {
       );
     }
     else {
-      content = Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                decoration: new BoxDecoration(
-                  border: new Border.all(
-                      color: Colors.black12,
-                      width: 3.5,
-                      style: BorderStyle.solid
+      content = GestureDetector(
+        onTap: () {
+          setState(() {
+            this.step = 2;
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                        color: Colors.black12,
+                        width: 3.5,
+                        style: BorderStyle.solid
+                    ),
+                    color: Color.fromARGB(18, 0, 0, 0),
+                    shape: BoxShape.circle,
                   ),
-                  color: Color.fromARGB(18, 0, 0, 0),
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                child: Text(
-                  "2",
-                  style: TextStyle(
-                      color: Colors.black12,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Text(
+                    "2",
+                    style: TextStyle(
+                        color: Colors.black12,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8.00,),
-              Column(
-                children: <Widget>[
-                  Container(
-                      width: 200.00,
-                      height: 30.00,
-                      decoration: new BoxDecoration(
+                const SizedBox(width: 8.00,),
+                Column(
+                  children: <Widget>[
+                    Container(
+                        width: 200.00,
+                        height: 30.00,
+                        decoration: new BoxDecoration(
 //                      color: JepretColor.PRIMARY_DARKER,
-                        borderRadius: new BorderRadius.only(
-                          topLeft: new Radius.circular(20.0),
-                          topRight: new Radius.circular(20.0),
-                          bottomRight: new Radius.circular(20.0),
-                          bottomLeft: new Radius.circular(20.0),
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
-                      child: Row(
-                        children: <Widget>[
-                          const SizedBox(width: 10.00),
-                          Text(
-                            "Ambil Foto Tempatnya",
-                            style: TextStyle(
-                              color: Colors.black38,
-                              fontSize: 15,
-                            ),
+                          borderRadius: new BorderRadius.only(
+                            topLeft: new Radius.circular(20.0),
+                            topRight: new Radius.circular(20.0),
+                            bottomRight: new Radius.circular(20.0),
+                            bottomLeft: new Radius.circular(20.0),
                           ),
-                        ],
-                      )
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                        ),
+                        padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 10.00),
+                            Text(
+                              "Ambil Foto Tempatnya",
+                              style: TextStyle(
+                                color: Colors.black38,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        )
       );
     }
     return content;
@@ -477,6 +497,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
               child: OutlinedPrimaryButton(
                 text: "Jepret",
                 onPressed: () {
+                  getImage();
                   setState(() {
                     step = 3;
                   });
@@ -580,69 +601,76 @@ class _ReviewStepsState extends State<ReviewSteps> {
       );
     }
     else {
-      content = Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                decoration: new BoxDecoration(
-                  border: new Border.all(
-                      color: Colors.black12,
-                      width: 3.5,
-                      style: BorderStyle.solid
+      content = GestureDetector(
+        onTap: () {
+          setState(() {
+            this.step = 3;
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                        color: Colors.black12,
+                        width: 3.5,
+                        style: BorderStyle.solid
+                    ),
+                    color: Color.fromARGB(18, 0, 0, 0),
+                    shape: BoxShape.circle,
                   ),
-                  color: Color.fromARGB(18, 0, 0, 0),
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                child: Text(
-                  "3",
-                  style: TextStyle(
-                      color: Colors.black12,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Text(
+                    "3",
+                    style: TextStyle(
+                        color: Colors.black12,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8.00,),
-              Column(
-                children: <Widget>[
-                  Container(
-                      width: 200.00,
-                      height: 30.00,
-                      decoration: new BoxDecoration(
+                const SizedBox(width: 8.00,),
+                Column(
+                  children: <Widget>[
+                    Container(
+                        width: 200.00,
+                        height: 30.00,
+                        decoration: new BoxDecoration(
 //                      color: Color.fromARGB(18, 0, 0, 0),
-                        borderRadius: new BorderRadius.only(
-                          topLeft: new Radius.circular(20.0),
-                          topRight: new Radius.circular(20.0),
-                          bottomRight: new Radius.circular(20.0),
-                          bottomLeft: new Radius.circular(20.0),
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
-                      child: Row(
-                        children: <Widget>[
-                          const SizedBox(width: 10.00),
-                          Text(
-                            "Beri Bintangnya",
-                            style: TextStyle(
-                              color: Colors.black38,
-                              fontSize: 15,
-                            ),
+                          borderRadius: new BorderRadius.only(
+                            topLeft: new Radius.circular(20.0),
+                            topRight: new Radius.circular(20.0),
+                            bottomRight: new Radius.circular(20.0),
+                            bottomLeft: new Radius.circular(20.0),
                           ),
-                        ],
-                      )
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                        ),
+                        padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 10.00),
+                            Text(
+                              "Beri Bintangnya",
+                              style: TextStyle(
+                                color: Colors.black38,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     }
     return content;
@@ -786,7 +814,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Text("Langkah ini opsional"),
+                    Text("Langkah ini opsional")
                   ],
                 ),
                 Row(
@@ -809,69 +837,76 @@ class _ReviewStepsState extends State<ReviewSteps> {
       );
     }
     else {
-      content = Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                decoration: new BoxDecoration(
-                  border: new Border.all(
-                      color: Colors.black12,
-                      width: 3.5,
-                      style: BorderStyle.solid
+      content = GestureDetector(
+        onTap: () {
+          setState(() {
+            this.step = 4;
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                        color: Colors.black12,
+                        width: 3.5,
+                        style: BorderStyle.solid
+                    ),
+                    color: Color.fromARGB(18, 0, 0, 0),
+                    shape: BoxShape.circle,
                   ),
-                  color: Color.fromARGB(18, 0, 0, 0),
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                child: Text(
-                  "4",
-                  style: TextStyle(
-                      color: Colors.black12,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Text(
+                    "4",
+                    style: TextStyle(
+                        color: Colors.black12,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8.00,),
-              Column(
-                children: <Widget>[
-                  Container(
-                      width: 200.00,
-                      height: 30.00,
-                      decoration: new BoxDecoration(
+                const SizedBox(width: 8.00,),
+                Column(
+                  children: <Widget>[
+                    Container(
+                        width: 200.00,
+                        height: 30.00,
+                        decoration: new BoxDecoration(
 //                      color: JepretColor.PRIMARY_DARKER,
-                        borderRadius: new BorderRadius.only(
-                          topLeft: new Radius.circular(20.0),
-                          topRight: new Radius.circular(20.0),
-                          bottomRight: new Radius.circular(20.0),
-                          bottomLeft: new Radius.circular(20.0),
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
-                      child: Row(
-                        children: <Widget>[
-                          const SizedBox(width: 10.00),
-                          Text(
-                            "Tulis Ulasannya",
-                            style: TextStyle(
-                              color: Colors.black38,
-                              fontSize: 15,
-                            ),
+                          borderRadius: new BorderRadius.only(
+                            topLeft: new Radius.circular(20.0),
+                            topRight: new Radius.circular(20.0),
+                            bottomRight: new Radius.circular(20.0),
+                            bottomLeft: new Radius.circular(20.0),
                           ),
-                        ],
-                      )
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                        ),
+                        padding: EdgeInsets.fromLTRB(8.00, 0.00, 8, 0.00),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 10.00),
+                            Text(
+                              "Tulis Ulasannya",
+                              style: TextStyle(
+                                color: Colors.black38,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     }
     return content;

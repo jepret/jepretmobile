@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:jepret/components/OutlinedPrimaryButton.dart';
+import 'package:jepret/model/Partner.dart';
 import 'package:jepret/components/AppBarWithImage.dart';
 import 'package:jepret/pages/individual/ReviewSteps.dart';
 
 class Review extends StatefulWidget {
-  Review() : super();
+  Partner partner;
+  Review(this.partner);
 
   @override
-  _ReviewState createState() => _ReviewState();
+  _ReviewState createState() => _ReviewState(partner);
 }
 
 class _ReviewState extends State<Review> {
+  Partner partner;
+  _ReviewState(this.partner);
 
   @override
   void initState() {
@@ -25,12 +28,9 @@ class _ReviewState extends State<Review> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.width * 0.50,
-                  maxWidth: MediaQuery.of(context).size.width * 1.00,
-                ),
-                child: AppBarWithImage(),
+              AspectRatio(
+                aspectRatio: 16/10,
+                child: AppBarWithImage(partner),
               ),
               Container(
 //              constraints: BoxConstraints(
@@ -39,7 +39,7 @@ class _ReviewState extends State<Review> {
 //              ),
                 child: Column(
                   children: <Widget>[
-                    ReviewSteps(),
+                    ReviewSteps(partner),
                   ],
                 ),
               ),

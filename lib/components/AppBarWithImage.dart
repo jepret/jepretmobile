@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:jepret/components/HeadingText.dart';
+import 'package:jepret/model/Partner.dart';
 
 class AppBarWithImage extends StatefulWidget {
-  AppBarWithImage() : super();
+  Partner partner;
+  AppBarWithImage(this.partner) : super();
 
   @override
-  _AppBarWithImageState createState() => _AppBarWithImageState();
+  _AppBarWithImageState createState() => _AppBarWithImageState(partner);
 }
 
 class _AppBarWithImageState extends State<AppBarWithImage> {
+  Partner partner;
+
+  _AppBarWithImageState(this.partner);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class _AppBarWithImageState extends State<AppBarWithImage> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage("https://img.sndimg.com/food/image/upload/w_560,h_315,c_fill,fl_progressive,q_80/v1/img/recipes/53/74/76/83kDuWs7QsCf4oZ0rhFs_0S9A7513.jpg"),
+                image: NetworkImage(this.partner.imageUrl),
               ),
             ),
             child: Column(
@@ -45,22 +50,24 @@ class _AppBarWithImageState extends State<AppBarWithImage> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.arrow_back, color: Colors.white),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          const SizedBox(height: 40.00),
-                          HeadingText(text: "Christzen's Steakhouse", color: Colors.white),
-                          Text("Jl. Mega Kuningan Barat No. 3", style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.arrow_back, color: Colors.white),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            Container(height: 40),
+                            HeadingText(text: this.partner.name, color: Colors.white),
+                            Text(this.partner.location.streetAddress, style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 )
