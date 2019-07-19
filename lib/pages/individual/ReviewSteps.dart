@@ -25,7 +25,7 @@ class ReviewSteps extends StatefulWidget {
 
 class _ReviewStepsState extends State<ReviewSteps> {
   File _image;
-  TextEditingController _controller_url = new TextEditingController();
+  TextEditingController _controller_review = new TextEditingController();
   int step;
   int lastStep;
   int rating;
@@ -831,26 +831,32 @@ class _ReviewStepsState extends State<ReviewSteps> {
             padding: EdgeInsets.fromLTRB(65.00, 0.00, 16.00, 0.00),
             child: Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text("Langkah ini opsional")
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0.00, 5.00, 0.00, 0.00),
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.70,
-                      ),
-                      child: Container(),
-                    )
-                  ],
-                ),
+//                Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  mainAxisSize: MainAxisSize.max,
+//                  children: <Widget>[
+//                    Text("Langkah ini opsional")
+//                  ],
+//                ),
+              Container(height: 16),
+                JepretTextField(
+                  controller: _controller_review,
+                  label: "Ulasan (opsional)",
+                  hasFloatingPlaceholder: true,
+                )
+//                Row(
+//                  mainAxisAlignment: MainAxisAlignment.start,
+//                  mainAxisSize: MainAxisSize.max,
+//                  children: <Widget>[
+//                    Container(
+//                      padding: EdgeInsets.fromLTRB(0.00, 5.00, 0.00, 0.00),
+//                      constraints: BoxConstraints(
+//                        maxWidth: MediaQuery.of(context).size.width * 0.70,
+//                      ),
+//                      child: Container(),
+//                    )
+//                  ],
+//                ),
               ],
             ),
           ),
@@ -996,36 +1002,43 @@ class _ReviewStepsState extends State<ReviewSteps> {
     );
   }
 
-  void _attemptSubmit() {
+  void _attemptSubmit() async {
     JepretAppState state = JepretApp.of(context);
     String sector = this.partner.sector;
     String umkm = this.partner.partnerId;
-    String photo = ApiEndpoints.GET_FILE;
 
-    _upload(this._image).then((response) {
-      dynamic body = {
-        'umkm': int.parse(umkm),
-        'photo': photo + response['data'][0]['unique_id'],
-        'qas': [
-          {
-            'question': 'Is it a $sector?',
-            'answer': step1Ans ? 'Ya' : 'Tidak',
-          }
-        ],
-        'star': rating,
-        'review': 'Very good'
-      };
+    String imageUrl = null;
+    if(this._image != null) {
+      dynamic response = await _upload(this._image);
+      imageUrl = "${ApiEndpoints.GET_FILE}${response['data'][0]['unique_id']}";
+    }
 
-      http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
-        'Content-Type': 'application/json',
-        'Authorization': state.authentication.authToken
-      }).then((_) {
-        Navigator.of(context).pop();
-      });
+    dynamic body = {
+      'umkm': int.parse(umkm),
+      'photo': imageUrl,
+      'qas': [
+        {
+          'question': 'Is it a $sector?',
+          'answer': step1Ans ? 'Ya' : 'Tidak',
+        }
+      ],
+      'star': rating,
+      'review': _controller_review.text
+    };
+
+    await http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': state.authentication.authToken
     });
+
+    Navigator.of(context).pop();
   }
 
-  Future _upload(File imageFile) async {
+  Future<dynamic> _upload(File imageFile) async {
+    if(imageFile == null) {
+      return Future.value(null);
+    }
+
     var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
     JepretAppState state = JepretApp.of(context);

@@ -14,7 +14,7 @@ PODS:
     - Flutter
   - location (0.0.1):
     - Flutter
-  - permission_handler (1.0.0):
+  - permission_handler (2.0.0):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
@@ -49,15 +49,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
-  fast_qr_reader_view: 53b38a544886e650381ca579e0cdd5ae142fffa6
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  google_maps_flutter: 78a52114c898b42ea647919679a4c58b70abe876
+  fast_qr_reader_view: 8e7946be31e3d99b3355924e1f0ec1eca6e01fc9
+  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  google_maps_flutter: a09053b3f7a9f1456924d46e34528acc7aa5e0b9
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
-  image_picker: a211f28b95a560433c00f5cd3773f4710a20404d
-  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
-  permission_handler: 7314e54f3b77f90dd997ea940560f9027c448d90
-  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
+  image_picker: ee00aab0487cedc80a304085219503cc6d0f2e22
+  location: 26c90953ad5916331d0d1d913898779910416487
+  permission_handler: d18559f3fbbc767b9c3af4849bf7b95c92467b22
+  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
 
-PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
 
-COCOAPODS: 1.7.4
+COCOAPODS: 1.5.3
