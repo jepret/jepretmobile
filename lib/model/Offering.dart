@@ -1,8 +1,8 @@
 import 'package:jepret/model/Partner.dart';
 
 class Offering {
-  double monetaryOffering;
+  int rewardLevel;
   Partner partner;
 
-  Offering({this.monetaryOffering, this.partner});
+  Offering({this.rewardLevel, this.partner});
 }

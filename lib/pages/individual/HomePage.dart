@@ -7,66 +7,91 @@ import 'package:jepret/components/HomeShowcaseCard.dart';
 import 'package:jepret/components/HomeSectionHeading.dart';
 import 'package:jepret/model/Offering.dart';
 import 'package:jepret/model/Partner.dart';
+import 'package:jepret/model/DistancedPartner.dart';
 import 'package:jepret/model/Location.dart';
 import 'package:jepret/routes/individual/RedeemScanBarcodeRoute.dart';
 import 'package:jepret/routes/individual/RedeemIncentiveRoute.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart' as loclib;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
+import 'package:jepret/constants/ApiEndpoints.dart';
+import 'dart:convert';
 import 'package:after_layout/after_layout.dart';
 
 class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
-  List<Offering> questItems;
-  List<Partner> nearestPartnerItems;
+class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
+  List<Offering> questItems = [];
+  List<DistancedPartner> nearestPartnerItems = [];
   Location currentLocation;
   int currentVisits = 0;
+  loclib.Location loc = new loclib.Location();
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    requestPermission();
+
+    loc.onLocationChanged().listen((Map<String, double> currloc) {
+      this.setState(() {
+        currentLocation.lat = currloc['latitude'];
+        currentLocation.lon = currloc['longitude'];
+      });
+
+      getNearbyUMKM(context, currentLocation.lat, currentLocation.lon).then((response) {
+        var temp = jsonDecode(response.body);
+
+        List<Offering> offerings = [];
+        List<DistancedPartner> nearest = [];
+
+        List<dynamic> items = temp['data'];
+        print(temp);
+        print(items);
+        for (int i = 0; i < items.length; i++) {
+          offerings.add(
+              Offering(
+                  rewardLevel: items[i]['reward_level'],
+                  partner: Partner(
+                    partnerId: items[i]['id'].toString(),
+                    name: items[i]['name'],
+                    imageUrl: items[i]['photo'],
+                  )
+              )
+          );
+
+          nearest.add(
+              DistancedPartner(
+                  distance: items[i]['distance'],
+                  partner: Partner(
+                    partnerId: items[i]['id'].toString(),
+                    name: items[i]['name'],
+                    imageUrl: items[i]['photo'],
+                  )
+              )
+          );
+        }
+
+        this.setState(() {
+          questItems = offerings;
+          nearestPartnerItems = nearest;
+        });
+      });
+    });
+
+    getCurrentLocation(loc).then((temp) {
+      this.setState(() {
+        currentLocation.lat = temp['latitude'];
+        currentLocation.lon = temp['longitude'];
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     this.setState(() {
-      this.questItems = [
-        Offering(
-            monetaryOffering: 5343,
-            partner: Partner(
-              partnerId: "abxbdc",
-              name: "Onel's Kitchen",
-              imageUrl: "https://img.sndimg.com/food/image/upload/w_560,h_315,c_fill,fl_progressive,q_80/v1/img/recipes/53/74/76/83kDuWs7QsCf4oZ0rhFs_0S9A7513.jpg",
-            )
-        ),
-        Offering(
-            monetaryOffering: 2456,
-            partner: Partner(
-              partnerId: "abxbdc2",
-              name: "Gabu's Weebs Store",
-              imageUrl: "http://i.imgur.com/juY3Z2z.jpg",
-            )
-        ),
-        Offering(
-            monetaryOffering: 1425,
-            partner: Partner(
-              partnerId: "abxbdc3",
-              name: "Warmindo Putra Sunda",
-              imageUrl: "https://2.bp.blogspot.com/-kYVFJrav8As/WrFs74W9EDI/AAAAAAAAArc/g4M-wQe7bgcD19JyQ-9EHW7gAiku4KeEgCLcBGAs/s1600/burjo%2Bbisnis%2Bmodal%2Bkecil%2Bkeuntungan%2Bbesar.jpg",
-            )
-        )
-      ];
-
-      this.nearestPartnerItems = [
-        Partner(
-            partnerId: "166gd6",
-            name: "Feby's Breakfast Joint",
-            imageUrl: "http://www.thebedfordgc.com/wp-content/uploads/2019/03/burger.jpg"
-        ),
-        Partner(
-            partnerId: "556s556d",
-            name: "Warung Ko Christzen",
-            imageUrl: "http://marketeers.com/wp-content/uploads/2018/11/warung_xl-a.jpg"
-        )
-      ];
-
       this.currentLocation = Location(
         streetAddress: "Sopo Del Tower B Lt 8",
         municipality: "Jakarta Selatan",
@@ -183,7 +208,7 @@ class HomePageState extends State<HomePage> {
                   padding: EdgeInsets.fromLTRB(paddingLeft, 0, paddingRight, 0),
                   child: HomeShowcaseCard(
                     title: _offering.partner.name,
-                    subtitle: "Dapatkan Rp${_offering.monetaryOffering.round()},-",
+                    subtitle: "Reward: ${_offering.rewardLevel}",
                     backgroundImage: NetworkImage(_offering.partner.imageUrl),
                     onPressed: () {},
                   )
@@ -218,16 +243,16 @@ class HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: nearestPartnerItems.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final Partner _partner = nearestPartnerItems[index];
+                  final DistancedPartner _partner = nearestPartnerItems[index];
                   final double paddingLeft = (index == 0) ? 8 : 0;
                   final double paddingRight = (index == nearestPartnerItems.length-1) ? 8 : 0;
 
                   return Padding(
                       padding: EdgeInsets.fromLTRB(paddingLeft, 0, paddingRight, 0),
                       child: HomeShowcaseCard(
-                        title: _partner.name,
-                        subtitle: "456m", // TODO calculate
-                        backgroundImage: NetworkImage(_partner.imageUrl),
+                        title: _partner.partner.name,
+                        subtitle: "${_partner.distance}km",
+                        backgroundImage: NetworkImage(_partner.partner.imageUrl),
                         onPressed: () {},
                       )
                   );
@@ -252,5 +277,30 @@ class HomePageState extends State<HomePage> {
         );
       }
     });
+  }
+
+  requestPermission() async {
+    await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
+  }
+
+  getCurrentLocation(loclib.Location loc) async {
+    return await loc.getLocation();
+  }
+
+  getNearbyUMKM(BuildContext context, double lat, double lng) async {
+    JepretAppState state = JepretApp.of(context);
+    final String authToken = state.authentication.authToken;
+
+    return await http.post(
+        ApiEndpoints.GET_NEARBY_UMKM,
+        body: json.encode({
+          'lat': lat,
+          'lng': lng
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
   }
 }
