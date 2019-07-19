@@ -9,6 +9,6 @@ class ApiEndpoints {
   static const GET_UMKM_BY_ID = "${BASE_URL}/umkm/";
   static const COMPLETE_UMKM_PROFILE_URL = "${BASE_URL}/umkm-detail/";
   static const CREATE_VERIFICATION = "${BASE_URL}/verification/";
-  static const UPLOAD_FILE = "${BASE_URL}/file";
-  static const GET_FILE = "${BASE_URL}/file";
+  static const UPLOAD_FILE = "${BASE_URL}/file/";
+  static const GET_FILE = "${BASE_URL}/file/";
 }

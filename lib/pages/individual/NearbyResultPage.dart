@@ -56,10 +56,12 @@ Widget buildListTile(BuildContext context, dynamic item) {
   var distance = '1';
   var image = item['photo'];
   var rewardLevel = item['reward_level'];
+  print(item);
 
   final Partner partner = Partner(
       name: item['name'],
       sector: item['sector'],
+      partnerId: item['id'].toString(),
       imageUrl: item['photo'],
       location: Location(
           lat: item['lat'],

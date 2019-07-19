@@ -3,7 +3,7 @@ import 'package:jepret/constants/JepretColor.dart';
 import 'package:jepret/components/OutlinedPrimaryButton.dart';
 import 'package:jepret/model/Partner.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:permission_handler/permission_enums.dart';
+//import 'package:permission_handler/permission_enums.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jepret/app.dart';
@@ -11,6 +11,8 @@ import 'package:jepret/constants/ApiEndpoints.dart';
 import 'dart:io';
 import 'package:jepret/components/JepretTextField.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:async/async.dart';
 
 class ReviewSteps extends StatefulWidget {
   Partner partner;
@@ -44,8 +46,10 @@ class _ReviewStepsState extends State<ReviewSteps> {
     });
   }
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+  getImage() async {
+    var image = await ImagePicker.pickImage();
+    print('this is my image !!!!!!!!!!!!!!!!');
+//    print(image);
 
     setState(() {
       _image = image;
@@ -410,7 +414,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
                       ),
                       child: _image == null
                           ? Text('Tolong ambil foto.')
-                          : Image.file(_image),
+                          : new Image.file(_image),
                     ),
                     const SizedBox(width: 50,)
                   ],
@@ -930,7 +934,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
   }
 
   requestPermission() async {
-    await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
+    await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
   }
 
   Widget _renderBottom() {
@@ -994,62 +998,51 @@ class _ReviewStepsState extends State<ReviewSteps> {
 
   void _attemptSubmit() {
     JepretAppState state = JepretApp.of(context);
-    String sector = partner.sector;
-    String photo = ApiEndpoints.GET_FILE + 'atUMuVpXNKKeBdLUnQfjoHZTseFOez';
+    String sector = this.partner.sector;
+    String umkm = this.partner.partnerId;
+    String photo = ApiEndpoints.GET_FILE;
 
-//    _uploadPhoto().then((response) {
-//      photo = response.body.unique_id;
-//    });
-//    getUploadImg(_image).then((response) {
-//      photo = ApiEndpoints.UPLOAD_FILE + response.unique_id;
-//      print(photo);
-//    });
-    dynamic body = {
-      'umkm': partner.partnerId,
-      'photo': photo,
-      'qas': [
-        {
-          'question': 'Is it a $sector?',
-          'answer': step1Ans ? 'Ya' : 'Tidak',
-        }
-      ]
-    };
+    _upload(this._image).then((response) {
+      dynamic body = {
+        'umkm': int.parse(umkm),
+        'photo': photo + response['data'][0]['unique_id'],
+        'qas': [
+          {
+            'question': 'Is it a $sector?',
+            'answer': step1Ans ? 'Ya' : 'Tidak',
+          }
+        ],
+        'star': rating,
+        'review': 'Very good'
+      };
 
-    http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': state.authentication.authToken
-    }).then((_) {
-      Navigator.of(context).pop();
+      http.post(ApiEndpoints.CREATE_VERIFICATION, body: json.encode(body), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': state.authentication.authToken
+      }).then((_) {
+        Navigator.of(context).pop();
+      });
     });
   }
 
-  _uploadPhoto() async {
+  Future _upload(File imageFile) async {
+    var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    var length = await imageFile.length();
     JepretAppState state = JepretApp.of(context);
-
     Map<String, String> headers = { "Authorization": state.authentication.authToken};
+
     var uri = Uri.parse(ApiEndpoints.UPLOAD_FILE);
+
     var request = new http.MultipartRequest("POST", uri);
     request.headers.addAll(headers);
 
-    request.files.add(new http.MultipartFile.fromBytes(
-        'file',
-        await _image.readAsBytes()));
+    var multipartFile = new http.MultipartFile('file[]', stream, length,
+        filename: 'temp.jpg');
+    //contentType: new MediaType('image', 'png'));
+
+    request.files.add(multipartFile);
     var response = await request.send();
-    if (response.statusCode == 200) print('Uploaded!');
-    return (response);
+    print(response.statusCode);
+    return json.decode(await response.stream.bytesToString());
   }
-
-  Future getUploadImg(File _image) async {
-    JepretAppState state = JepretApp.of(context);
-    Map<String, String> headers = { "Authorization": state.authentication.authToken};
-    String apiUrl = ApiEndpoints.UPLOAD_FILE;
-    final length = await _image.length();
-
-    final multipartRequest = new http.MultipartRequest('POST', Uri.parse(apiUrl))
-      ..files.add(new http.MultipartFile('avatar', _image.openRead(), length));
-    http.Response response = await http.Response.fromStream(await multipartRequest.send());
-    print("Result: ${response.body}");
-    multipartRequest.headers.addAll(headers);
-
-    return json.decode(response.body);
-  }}
+}

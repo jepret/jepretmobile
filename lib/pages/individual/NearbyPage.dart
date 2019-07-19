@@ -5,7 +5,7 @@ import 'package:jepret/model/Location.dart' as JepretModelLocation;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:permission_handler/permission_enums.dart';
+//import 'package:permission_handler/permission_enums.dart';
 import 'package:http/http.dart' as http;
 import 'package:jepret/constants/ApiEndpoints.dart';
 import 'dart:convert';
@@ -141,6 +141,7 @@ class _NearbyPageState extends State<NearbyPage> {
 
   void onUMKMReview(int user_id) {
     getUMKMById(user_id).then((Partner partner) {
+      print(partner.partnerId);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Review(partner)),
@@ -252,7 +253,7 @@ class _NearbyPageState extends State<NearbyPage> {
   }
 
   requestPermission() async {
-    await PermissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
+    await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
   }
 
   getCurrentLocation(loc) async {
