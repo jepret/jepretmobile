@@ -1005,7 +1005,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
   void _attemptSubmit() async {
     JepretAppState state = JepretApp.of(context);
     String sector = this.partner.sector;
-    String umkm = this.partner.partnerId;
+    int umkm = this.partner.partnerId;
 
     String imageUrl = null;
     if(this._image != null) {
@@ -1014,7 +1014,7 @@ class _ReviewStepsState extends State<ReviewSteps> {
     }
 
     dynamic body = {
-      'umkm': int.parse(umkm),
+      'umkm': umkm,
       'photo': imageUrl,
       'qas': [
         {

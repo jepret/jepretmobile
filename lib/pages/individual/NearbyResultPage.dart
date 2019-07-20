@@ -61,7 +61,7 @@ Widget buildListTile(BuildContext context, dynamic item) {
   final Partner partner = Partner(
       name: item['name'],
       sector: item['sector'],
-      partnerId: item['id'].toString(),
+      partnerId: item['id'],
       imageUrl: item['photo'],
       location: Location(
           lat: item['lat'],

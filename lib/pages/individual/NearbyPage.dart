@@ -282,7 +282,7 @@ class _NearbyPageState extends State<NearbyPage> {
     final String authToken = state.authentication.authToken;
 
     http.Response response = await http.get(
-        "${ApiEndpoints.GET_UMKM_BY_ID}/${id}",
+        "${ApiEndpoints.GET_UMKM_BY_ID}${id}",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': authToken

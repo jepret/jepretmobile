@@ -1,7 +1,7 @@
 import 'package:jepret/model/Location.dart';
 
 class Partner {
-  String partnerId;
+  int partnerId;
   String name;
   String imageUrl;
   String sector;

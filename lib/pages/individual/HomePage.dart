@@ -7,7 +7,6 @@ import 'package:jepret/components/HomeShowcaseCard.dart';
 import 'package:jepret/components/HomeSectionHeading.dart';
 import 'package:jepret/model/Offering.dart';
 import 'package:jepret/model/Partner.dart';
-import 'package:jepret/model/DistancedPartner.dart';
 import 'package:jepret/model/Location.dart';
 import 'package:jepret/routes/individual/RedeemScanBarcodeRoute.dart';
 import 'package:jepret/routes/individual/RedeemIncentiveRoute.dart';
@@ -18,20 +17,25 @@ import 'package:http/http.dart' as http;
 import 'package:jepret/constants/ApiEndpoints.dart';
 import 'dart:convert';
 import 'package:after_layout/after_layout.dart';
+import 'package:latlong/latlong.dart';
+import 'package:jepret/pages/individual/Review.dart';
 
 class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
-  List<Offering> questItems = [];
-  List<DistancedPartner> nearestPartnerItems = [];
+  List<Offering> questItems;
+  List<Partner> nearestPartnerItems;
   Location currentLocation;
   int currentVisits = 0;
   loclib.Location loc = new loclib.Location();
+  final Distance distance = new Distance();
 
   @override
   void afterFirstLayout(BuildContext context) {
+    debugPrint("firstLayout");
+
     requestPermission();
 
     loc.onLocationChanged().listen((Map<String, double> currloc) {
@@ -40,44 +44,7 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
         currentLocation.lon = currloc['longitude'];
       });
 
-      getNearbyUMKM(context, currentLocation.lat, currentLocation.lon).then((response) {
-        var temp = jsonDecode(response.body);
-
-        List<Offering> offerings = [];
-        List<DistancedPartner> nearest = [];
-
-        List<dynamic> items = temp['data'];
-        print(temp);
-        print(items);
-        for (int i = 0; i < items.length; i++) {
-          offerings.add(
-              Offering(
-                  rewardLevel: items[i]['reward_level'],
-                  partner: Partner(
-                    partnerId: items[i]['id'].toString(),
-                    name: items[i]['name'],
-                    imageUrl: items[i]['photo'],
-                  )
-              )
-          );
-
-          nearest.add(
-              DistancedPartner(
-                  distance: items[i]['distance'],
-                  partner: Partner(
-                    partnerId: items[i]['id'].toString(),
-                    name: items[i]['name'],
-                    imageUrl: items[i]['photo'],
-                  )
-              )
-          );
-        }
-
-        this.setState(() {
-          questItems = offerings;
-          nearestPartnerItems = nearest;
-        });
-      });
+      loadData();
     });
 
     getCurrentLocation(loc).then((temp) {
@@ -86,23 +53,74 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
         currentLocation.lon = temp['longitude'];
       });
     });
+
+    loadData();
+  }
+
+  void loadData() {
+    getNearbyUMKM(context, currentLocation.lat, currentLocation.lon).then((response) {
+      var temp = jsonDecode(response.body);
+
+      List<Offering> offerings = [];
+      List<Partner> nearest = [];
+
+      List<dynamic> items = temp['data'];
+      print(temp);
+      print(items);
+      for (int i = 0; i < items.length; i++) {
+        offerings.add(
+            Offering(
+                rewardLevel: items[i]['reward_level'],
+                partner: Partner(
+                    partnerId: items[i]['id'],
+                    name: items[i]['name'],
+                    imageUrl: items[i]['photo'],
+                    location: Location(
+                        lat: items[i]['lat'],
+                        lon: items[i]['lng']
+                    )
+                )
+            )
+        );
+
+        nearest.add(
+            Partner(
+                partnerId: items[i]['id'],
+                name: items[i]['name'],
+                imageUrl: items[i]['photo'],
+                location: Location(
+                    lat: items[i]['lat'],
+                    lon: items[i]['lng']
+                )
+            )
+        );
+      }
+
+      this.setState(() {
+        questItems = offerings;
+        nearestPartnerItems = nearest;
+      });
+    });
   }
 
   @override
   void initState() {
+    debugPrint("init");
+
     super.initState();
     this.setState(() {
       this.currentLocation = Location(
-        streetAddress: "Sopo Del Tower B Lt 8",
-        municipality: "Jakarta Selatan",
-        province: "DKI Jakarta",
         lat: 0,
         lon: 0
       );
+
+      this.questItems = [];
+      this.nearestPartnerItems = [];
     });
   }
 
   Widget build(BuildContext context) {
+    debugPrint(nearestPartnerItems.length.toString());
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -210,7 +228,9 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
                     title: _offering.partner.name,
                     subtitle: "Reward: ${_offering.rewardLevel}",
                     backgroundImage: NetworkImage(_offering.partner.imageUrl),
-                    onPressed: () {},
+                    onPressed: () {
+                      onUMKMReview(_offering.partner.partnerId);
+                    },
                   )
                 );
               },
@@ -243,17 +263,24 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: nearestPartnerItems.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final DistancedPartner _partner = nearestPartnerItems[index];
+                  final Partner _partner = nearestPartnerItems[index];
                   final double paddingLeft = (index == 0) ? 8 : 0;
                   final double paddingRight = (index == nearestPartnerItems.length-1) ? 8 : 0;
+                  final int distanceKm = distance.as(
+                    LengthUnit.Kilometer,
+                    LatLng(currentLocation.lat, currentLocation.lon),
+                    LatLng(_partner.location.lat, _partner.location.lon)
+                  ).round();
 
                   return Padding(
                       padding: EdgeInsets.fromLTRB(paddingLeft, 0, paddingRight, 0),
                       child: HomeShowcaseCard(
-                        title: _partner.partner.name,
-                        subtitle: "${_partner.distance}km",
-                        backgroundImage: NetworkImage(_partner.partner.imageUrl),
-                        onPressed: () {},
+                        title: _partner.name,
+                        subtitle: "${distanceKm}km",
+                        backgroundImage: NetworkImage(_partner.imageUrl),
+                        onPressed: () {
+                          onUMKMReview(_partner.partnerId);
+                        },
                       )
                   );
                 },
@@ -302,5 +329,56 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
           'Authorization': authToken
         }
     );
+  }
+
+  void onUMKMReview(int user_id) {
+    getUMKMById(user_id).then((Partner partner) {
+      print(partner.partnerId);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Review(partner)),
+      );
+    });
+  }
+
+  Future<Partner> getUMKMById(int id) async {
+    JepretAppState state = JepretApp.of(context);
+    final String authToken = state.authentication.authToken;
+
+    http.Response response = await http.get(
+        "${ApiEndpoints.GET_UMKM_BY_ID}${id}",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken
+        }
+    );
+
+    final String responseBody = response.body;
+
+    debugPrint(responseBody);
+
+    final Map<String, dynamic> map = jsonDecode(responseBody);
+
+    if(response.statusCode != 200) {
+      return Future.error(Exception(map['message'].toString()));
+    }
+
+    final Map<String, dynamic> data = map['data'];
+
+    final Partner partner = Partner(
+        partnerId: data['id'],
+        name: data['name'],
+        sector: data['sector'],
+        imageUrl: data['photo'],
+        location: Location(
+            lat: data['lat'],
+            lon: data['lng'],
+            streetAddress: data['address'],
+            province: data['province'],
+            municipality: data['city']
+        )
+    );
+
+    return partner;
   }
 }
